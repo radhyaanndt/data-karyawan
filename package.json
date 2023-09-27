@@ -2,11 +2,12 @@
   "name": "data-karyawan",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
-    "sq:cms": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    "sq:cms": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "vercel-build": "echo hello"
   },
   "author": "",
   "license": "ISC",
