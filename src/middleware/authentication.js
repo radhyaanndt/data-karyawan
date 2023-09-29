@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { Users } = require("../models")
+const { Users } = require("../models");
 
 exports.authentication = async (req, res, next) => {
   let token;
@@ -22,16 +22,14 @@ exports.authentication = async (req, res, next) => {
   try {
     decoded = await jwt.verify(token, process.env.JWT_SECRET);
   } catch (err) {
-    return next(
-      res.status(401).json({
-        status: 401,
-        message: "Invalid token",
-        error: err.message,
-      })
-    );
+    res.status(401).json({
+      status: 401,
+      message: "Invalid token",
+      error: err.message,
+    });
   }
-  
-  const currentUser = await Users.findByPk(decoded.user_id)
+
+  const currentUser = await Users.findByPk(decoded.user_id);
 
   // console.log(currentUser);
 

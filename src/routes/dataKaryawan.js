@@ -1,26 +1,12 @@
 const express = require("express");
-
+const multer = require("multer");
 const { authentication } = require("../middleware/authentication");
+const dataKaryawanController = require("../controllers/data-karyawan.controller");
 
-const dataKaryawan = require("../../data-karyawan.json");
+const router = express.Router();
 
-router = express.Router();
+const upload = multer({ dest: "./src/uploads/" }).single("file");
 
-router.get("/", authentication, (req, res, next) => {
-  const regionalFilter = req.query.regional || "";
+router.post("/input-data", authentication, upload, dataKaryawanController.inputData);
 
-  const dataFilter = dataKaryawan.filter((item) => item.Regional === regionalFilter);
-
-  if (!regionalFilter)
-    return res.status(200).send({
-      total: dataKaryawan.length,
-      data: dataKaryawan,
-    });
-
-  return res.status(200).send({
-    total: dataFilter.length,
-    data: dataFilter,
-  });
-});
-
-module.exports = router
+module.exports = router;
