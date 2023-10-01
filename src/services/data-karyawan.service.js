@@ -4,7 +4,7 @@ const xlstojson = require("xls-to-json");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 
-function inputExcel(file) {
+const inputExcel = (file) => {
   return new Promise((resolve, reject) => {
 
     if (!file) {
@@ -24,8 +24,6 @@ function inputExcel(file) {
     }
 
     const filePath = `./src/uploads/${file.filename}`;
-
-    // const fileOutput = `./src/output/data-karyawan-${Date.now()}.json`;
 
     excel2json(
       {
