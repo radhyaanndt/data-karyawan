@@ -1,17 +1,22 @@
-const fs = require("fs-extra");
-const xlsxtojson = require("xlsx-to-json");
-const xlstojson = require("xls-to-json");
 const dataKaryawanService = require("../services/data-karyawan.service");
 
-function inputData(req, res) {
-  dataKaryawanService
-    .inputExcel(req.file)
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((error) => {
-      res.json(error);
+const inputData = async (req, res) => {
+  try {
+    const data = await dataKaryawanService.inputExcel(req.file)
+    return res.status(200).send({
+      status: 200,
+      message: "OK",
+      data: data,
     });
+  } catch (error) {
+    if (error) {
+      return res.status(error.statusCode).send({
+        status: error.statusCode,
+        message: "Internal Server Error",
+        errors: error.message,
+      });
+    }
+  }
 }
 
 module.exports = { inputData };

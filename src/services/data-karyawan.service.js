@@ -1,9 +1,20 @@
 const fs = require("fs-extra");
 const xlsxtojson = require("xlsx-to-json");
 const xlstojson = require("xls-to-json");
+const httpStatus = require("http-status");
+const ApiError = require("../utils/ApiError");
 
 function inputExcel(file) {
   return new Promise((resolve, reject) => {
+
+    if (!file) {
+      throw new ApiError(httpStatus.BAD_REQUEST, "Please input file");
+    }
+
+    if (file.mimetype !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+      throw new ApiError(httpStatus.BAD_REQUEST, "Invalid file format");
+    }
+
     let excel2json;
 
     if (file.originalname.split(".")[file.originalname.split(".").length - 1] === "xlsx") {
@@ -14,12 +25,12 @@ function inputExcel(file) {
 
     const filePath = `./src/uploads/${file.filename}`;
 
-    const fileOutput = `./src/output/data-karyawan-${Date.now()}.json`;
+    // const fileOutput = `./src/output/data-karyawan-${Date.now()}.json`;
 
     excel2json(
       {
         input: filePath,
-        output: fileOutput,
+        output: null,
         lowerCaseHeaders: true,
       },
       function (err, result) {
