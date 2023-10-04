@@ -25,16 +25,18 @@ const inputData = async (req, res) => {
       regional: item["Regional"],
       business_unit_description: item["Business Unit Description"],
       plan_fulfillment: item["Plan Fulfillment"],
-      detail_plain_fulfillment: item["Detail Plan Fulfillment"],
+      detail_plan_fulfillment: item["Detail Plan Fulfillment"],
       nik_plan: item["NIK Plan"],
       nama_karyawan_plan_fulfillment: item["Nama Karyawan Plan Fulfillment"],
       mpe_plus_plan: item["MPE + Plan"],
       status_plan_fullfillment: item["Status Plan Fulfillment"],
     }));
 
-    return res.status(200).send({
-      status: 200,
-      message: "OK",
+    await dataKaryawanService.insertData(data);
+
+    return res.status(201).send({
+      status: 201,
+      message: "Created",
       data: data,
     });
   } catch (error) {
@@ -48,4 +50,27 @@ const inputData = async (req, res) => {
   }
 };
 
-module.exports = { inputData };
+const getData = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+
+    const employees = await dataKaryawanService.getData(limit, page);
+
+    return res.status(200).send({
+      status: 200,
+      message: "OK",
+      data: employees ,
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(error.statusCode).send({
+        status: error.statusCode,
+        message: "Internal Server Error",
+        errors: error.message,
+      });
+    }
+  }
+};
+
+module.exports = { inputData, getData };
