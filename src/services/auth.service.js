@@ -77,6 +77,7 @@ const login = async (reqBody) => {
   const token = {
     access_token: accessToken,
     user_id: currentUser.id,
+    role_id: currentUser.role_id,
   };
 
   return token;
