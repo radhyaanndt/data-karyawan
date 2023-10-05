@@ -2,7 +2,7 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
-const validator = require("validator")
+const validator = require("validator");
 const dotenv = require("dotenv");
 
 const { Users, Roles } = require("../models");
@@ -31,7 +31,6 @@ const generateToken = (user) => {
 };
 
 const login = async (reqBody) => {
-
   const { email, password } = reqBody;
 
   if (!email || !password) {
@@ -63,15 +62,27 @@ const login = async (reqBody) => {
 
   const accessToken = generateToken(payloadToken);
 
+  try {
+    decoded = await jwt.verify(accessToken, process.env.JWT_SECRET);
+  } catch (err) {
+    res.status(401).json({
+      status: 401,
+      message: "Invalid token",
+      error: err.message,
+    });
+  }
+
+  const currentUser = await Users.findByPk(decoded.user_id);
+
   const token = {
     access_token: accessToken,
+    user_id: currentUser.id,
   };
 
   return token;
 };
 
 const register = async (reqBody) => {
-  
   const { full_name, email, password, confirm_password } = reqBody;
 
   if (!full_name || !email || !password) {
@@ -101,15 +112,15 @@ const register = async (reqBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "minimum password length must be 8 charater or more");
   }
 
-  const hash = await hashPassword(password)
+  const hash = await hashPassword(password);
 
   const user = {
     full_name,
     email,
     password: hash,
-  }
+  };
 
-  await Users.create(user)
+  await Users.create(user);
 };
 
 module.exports = { login, register };
