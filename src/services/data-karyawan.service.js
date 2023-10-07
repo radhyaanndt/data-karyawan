@@ -4,6 +4,7 @@ const xlstojson = require("xls-to-json");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 const { Employee_data } = require("../models");
+const { Op } = require("sequelize");
 
 const inputExcel = (file) => {
   return new Promise((resolve, reject) => {
@@ -47,14 +48,26 @@ const insertData = async (data) => {
   await Employee_data.bulkCreate(data);
 };
 
-const getData = async (limit, page) => {
+const getData = async (limit, page, search) => {
   const offset = (page - 1) * limit;
+
+  const query = search;
+
+  const whereClause = {
+    [Op.or]: [
+      { regional: { [Op.iLike]: `%${query}%` } },
+      { position_description: { [Op.iLike]: `%${query}%` } },
+      { division_description: { [Op.iLike]: `%${query}%` } },
+      { status_plan_fullfillment: { [Op.iLike]: `%${query}%` } },
+    ],
+  };
 
   const employees = await Employee_data.findAndCountAll({
     limit,
     offset,
+    where: whereClause,
   });
-  const {rows, count} = employees;
+  const { rows, count } = employees;
 
   return {
     employees: rows,
@@ -63,7 +76,6 @@ const getData = async (limit, page) => {
     current_page: page,
     max_page: Math.ceil(count / limit),
   };
- 
 };
 
 module.exports = { inputExcel, insertData, getData };
