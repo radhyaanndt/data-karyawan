@@ -74,9 +74,9 @@ const getData = async (req, res) => {
   }
 };
 
-const getMpp = async (req, res) => {
+const getTotal = async (req, res) => {
   try {
-    const employees = await dataKaryawanService.getMpp();
+    const employees = await dataKaryawanService.getTotal();
 
     return res.status(200).send({
       status: 200,
@@ -94,4 +94,4 @@ const getMpp = async (req, res) => {
   }
 }
 
-module.exports = { inputData, getData, getMpp };
+module.exports = { inputData, getData, getTotal };

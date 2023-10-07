@@ -78,19 +78,43 @@ const getData = async (limit, page, search) => {
   };
 };
 
-const getMpp = async () => {
+const getTotal = async () => {
 
-  const employees = await Employee_data.findAndCountAll({
+  const mpp = await Employee_data.findAndCountAll({
     where: {
       mpp: "1",
     },
   });
-  const { count } = employees;
+  const mpe = await Employee_data.findAndCountAll({
+    where: {
+      mpe: "1",
+    },
+  });
+  const mpe_plus_plan = await Employee_data.findAndCountAll({
+    where: {
+      mpe_plus_plan: "1",
+    },
+  });
+
+
+  const employees = [mpp.count, mpe.count, mpe_plus_plan.count];
 
   return {
-    title: "TOTAL MPP",
-    total_data: count
+    data: [
+      {
+        title: "Total MPP",
+        total_data: employees[0],
+      },
+      {
+        title: "Total MPE",
+        total_data: employees[1],
+      },
+      {
+        title: "Total MPE + PLAN",
+        total_data: employees[2],
+      }
+    ]
   };
 };
 
-module.exports = { inputExcel, insertData, getData, getMpp };
+module.exports = { inputExcel, insertData, getData, getTotal };
