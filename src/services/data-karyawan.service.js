@@ -78,4 +78,19 @@ const getData = async (limit, page, search) => {
   };
 };
 
-module.exports = { inputExcel, insertData, getData };
+const getMpp = async () => {
+
+  const employees = await Employee_data.findAndCountAll({
+    where: {
+      mpp: "1",
+    },
+  });
+  const { count } = employees;
+
+  return {
+    title: "TOTAL MPP",
+    total_data: count
+  };
+};
+
+module.exports = { inputExcel, insertData, getData, getMpp };

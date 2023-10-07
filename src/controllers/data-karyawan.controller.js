@@ -74,4 +74,24 @@ const getData = async (req, res) => {
   }
 };
 
-module.exports = { inputData, getData };
+const getMpp = async (req, res) => {
+  try {
+    const employees = await dataKaryawanService.getMpp();
+
+    return res.status(200).send({
+      status: 200,
+      message: "OK",
+      data: employees,
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(500).send({
+        status: 500,
+        message: "Internal Server Error",
+        errors: error.message,
+      });
+    }
+  }
+}
+
+module.exports = { inputData, getData, getMpp };

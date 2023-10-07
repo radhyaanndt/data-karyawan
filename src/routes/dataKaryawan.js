@@ -9,5 +9,6 @@ const upload = multer({ dest: "./src/uploads/" }).single("file");
 
 router.get("/", dataKaryawanController.getData)
 router.post("/input-data", authentication, upload, dataKaryawanController.inputData);
+router.get("/mpp", dataKaryawanController.getMpp)
 
 module.exports = router;
