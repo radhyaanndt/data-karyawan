@@ -55,8 +55,12 @@ const getData = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
     const query = req.query.search || "";
+    const filter = [
+      req.query.business_unit_description || "",
+      req.query.regional || "",
+    ];
 
-    const employees = await dataKaryawanService.getData(limit, page, query);
+    const employees = await dataKaryawanService.getData(limit, page, query, filter);
 
     return res.status(200).send({
       status: 200,
@@ -65,8 +69,8 @@ const getData = async (req, res) => {
     });
   } catch (error) {
     if (error) {
-      return res.status(error.statusCode).send({
-        status: error.statusCode,
+      return res.status(500).send({
+        status: 500,
         message: "Internal Server Error",
         errors: error.message,
       });

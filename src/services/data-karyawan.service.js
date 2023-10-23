@@ -4,7 +4,7 @@ const xlstojson = require("xls-to-json");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 const { Employee_data } = require("../models");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 
 const inputExcel = (file) => {
   return new Promise((resolve, reject) => {
@@ -48,13 +48,14 @@ const insertData = async (data) => {
   await Employee_data.bulkCreate(data);
 };
 
-const getData = async (limit, page, search) => {
+const getData = async (limit, page, search, filter) => {
   const offset = (page - 1) * limit;
 
   const query = search;
 
   const whereClause = {
     [Op.or]: [
+      { business_unit_description: { [Op.iLike]: `%${query}%` } },
       { regional: { [Op.iLike]: `%${query}%` } },
       { position_description: { [Op.iLike]: `%${query}%` } },
       { division_description: { [Op.iLike]: `%${query}%` } },
@@ -62,14 +63,32 @@ const getData = async (limit, page, search) => {
     ],
   };
 
-  const employees = await Employee_data.findAndCountAll({
-    limit,
-    offset,
-    where: whereClause,
-  });
+
+  const [employees, totalCount] = await Promise.all([
+    Employee_data.findAndCountAll({
+      limit,
+      offset,
+      where: {
+        [Op.or]: [whereClause],
+      },
+    }),
+    Employee_data.findAll({
+      where: {
+        [Op.or]: [whereClause],
+      },
+    }),
+  ]);
+
   const { rows, count } = employees;
 
+  const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
+  const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
+  const mpe_plus_plan_count = totalCount.filter((item) => item.mpe_plus_plan === "1").length;
+
   return {
+    mpp_total: mpp_count,
+    mpe_total: mpe_count,
+    mpe_plus_plan_total: mpe_plus_plan_count,
     employees: rows,
     page_size: rows.length,
     total_data: count,
@@ -79,7 +98,6 @@ const getData = async (limit, page, search) => {
 };
 
 const getTotal = async () => {
-
   const mpp = await Employee_data.findAndCountAll({
     where: {
       mpp: "1",
@@ -96,7 +114,6 @@ const getTotal = async () => {
     },
   });
 
-
   const employees = [mpp.count, mpe.count, mpe_plus_plan.count];
 
   return {
@@ -112,8 +129,8 @@ const getTotal = async () => {
       {
         title: "Total MPE + PLAN",
         total_data: employees[2],
-      }
-    ]
+      },
+    ],
   };
 };
 
