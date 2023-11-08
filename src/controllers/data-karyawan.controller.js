@@ -54,10 +54,9 @@ const getData = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   const page = parseInt(req.query.page) || 1;
   const query = req.query.search || "";
-  const filter = [req.query.business_unit_description || "", req.query.regional || ""];
 
   try {
-    const employees = await dataKaryawanService.getData(limit, page, query, filter);
+    const employees = await dataKaryawanService.getData(limit, page, query);
 
     return res.status(200).send({
       status: 200,

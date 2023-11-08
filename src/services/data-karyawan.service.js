@@ -54,10 +54,10 @@ const getData = async (limit, page, search) => {
 
   const whereClause = {
     [Op.or]: [
-      { business_unit_description: { [Op.iLike]: `%${query}%` } },
+      { name: { [Op.iLike]: `%${query}%` } },
       { regional: { [Op.iLike]: `%${query}%` } },
+      { directorat_description: { [Op.iLike]: `%${query}%` } },
       { position_description: { [Op.iLike]: `%${query}%` } },
-      { division_description: { [Op.iLike]: `%${query}%` } },
       { status_plan_fulfillment: { [Op.iLike]: `%${query}%` } },
     ],
   };
