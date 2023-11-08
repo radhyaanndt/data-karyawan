@@ -11,7 +11,7 @@ router.get("/location-description", propertiesController.getLocationDescription)
 router.get("/directorat-description", propertiesController.getDirectoratDescription);
 router.get("/division-description", propertiesController.getDivisionDescription);
 router.get("/status", propertiesController.getStatus);
-// router.get("/position-description", propertiesController.getRegional);
+router.get("/position-description", propertiesController.getPositionDescription);
 // router.get("/status-plan-fulfillment", propertiesController.getRegional);
 
 module.exports = router;
