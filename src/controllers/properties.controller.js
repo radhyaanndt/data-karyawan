@@ -105,4 +105,25 @@ const getDirectoratDescription = async (req, res) => {
   }
 };
 
-module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription}
+const getDivisionDescription = async (req, res) => {
+  try {
+    const data = await propertiesService.getDivisionDescription();
+
+    const transformedData = data.map((item) => item.division_description);
+    return res.status(200).send({
+      status: 200,
+      message: "OK",
+      data: transformedData,
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(500).send({
+        status: 500,
+        message: "Internal Server Error",
+        errors: error.message,
+      });
+    }
+  }
+};
+
+module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription, getDivisionDescription }

@@ -42,4 +42,12 @@ const getDirectoratDescription = async () => {
   return data;
 };
 
-module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription }
+const getDivisionDescription = async () => {
+  const data = await Employee_data.findAll({
+    attributes: [[sequelize.fn("DISTINCT", sequelize.col("division_description")), "division_description"]],
+  });
+
+  return data;
+};
+
+module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription, getDivisionDescription }
