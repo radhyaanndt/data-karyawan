@@ -4,7 +4,7 @@ const xlstojson = require("xls-to-json");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 const { Employee_data } = require("../models");
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 const inputExcel = (file) => {
   return new Promise((resolve, reject) => {
