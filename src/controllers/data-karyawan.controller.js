@@ -51,16 +51,47 @@ const inputData = async (req, res) => {
 };
 
 const getData = async (req, res) => {
-  try {
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
-    const query = req.query.search || "";
-    const filter = [
-      req.query.business_unit_description || "",
-      req.query.regional || "",
-    ];
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  const query = req.query.search || "";
+  const filter = [req.query.business_unit_description || "", req.query.regional || ""];
 
+  try {
     const employees = await dataKaryawanService.getData(limit, page, query, filter);
+
+    return res.status(200).send({
+      status: 200,
+      message: "OK",
+      data: employees,
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(500).send({
+        status: 500,
+        message: "Internal Server Error",
+        errors: error.message,
+      });
+    }
+  }
+};
+
+const getFilteredData = async (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  const filter = [
+    req.query.business_unit_description || "",
+    req.query.regional || "",
+    req.query.group || "",
+    req.query.location_description || "",
+    req.query.directorat_description || "",
+    req.query.division_description || "",
+    req.query.status || "",
+    req.query.position_description || "",
+    req.query.status_plan_fullfillment || "",
+  ];
+
+  try {
+    const employees = await dataKaryawanService.getFilteredData(limit, page, filter);
 
     return res.status(200).send({
       status: 200,
@@ -96,6 +127,6 @@ const getTotal = async (req, res) => {
       });
     }
   }
-}
+};
 
-module.exports = { inputData, getData, getTotal };
+module.exports = { inputData, getData, getTotal, getFilteredData };

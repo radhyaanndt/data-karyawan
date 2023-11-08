@@ -48,9 +48,8 @@ const insertData = async (data) => {
   await Employee_data.bulkCreate(data);
 };
 
-const getData = async (limit, page, search, filter) => {
+const getData = async (limit, page, search) => {
   const offset = (page - 1) * limit;
-
   const query = search;
 
   const whereClause = {
@@ -61,8 +60,7 @@ const getData = async (limit, page, search, filter) => {
       { division_description: { [Op.iLike]: `%${query}%` } },
       { status_plan_fullfillment: { [Op.iLike]: `%${query}%` } },
     ],
-  };
-
+  }
 
   const [employees, totalCount] = await Promise.all([
     Employee_data.findAndCountAll({
@@ -75,6 +73,85 @@ const getData = async (limit, page, search, filter) => {
     Employee_data.findAll({
       where: {
         [Op.or]: [whereClause],
+      },
+    }),
+  ]);
+
+
+  const { rows, count } = employees;
+
+  const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
+  const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
+  const mpe_plus_plan_count = totalCount.filter((item) => item.mpe_plus_plan === "1").length;
+
+  return {
+    mpp_total: mpp_count,
+    mpe_total: mpe_count,
+    mpe_plus_plan_total: mpe_plus_plan_count,
+    employees: rows,
+    page_size: rows.length,
+    total_data: count,
+    current_page: page,
+    max_page: Math.ceil(count / limit),
+  };
+};
+
+const getFilteredData = async (limit, page, filter) => {
+  const offset = (page - 1) * limit;
+
+  const whereClauseFilter = {};
+
+  if (filter[0] !== "" || filter[1] !== "") {
+    whereClauseFilter[Op.and] = [];
+
+    if (filter[0] !== "") {
+      whereClauseFilter[Op.and].push({ business_unit_description: filter[0] });
+    }
+
+    if (filter[1] !== "") {
+      whereClauseFilter[Op.and].push({ regional: filter[1] });
+    }
+
+    if (filter[2] !== "") {
+      whereClauseFilter[Op.and].push({ group: filter[2] });
+    }
+
+    if (filter[3] !== "") {
+      whereClauseFilter[Op.and].push({ location_description: filter[3] });
+    }
+
+    if (filter[4] !== "") {
+      whereClauseFilter[Op.and].push({ directorat_description: filter[4] });
+    }
+
+    if (filter[5] !== "") {
+      whereClauseFilter[Op.and].push({ division_description: filter[5] });
+    }
+
+    if (filter[6] !== "") {
+      whereClauseFilter[Op.and].push({ status: filter[6] });
+    }
+
+    if (filter[7] !== "") {
+      whereClauseFilter[Op.and].push({ position_description: filter[7] });
+    }
+
+    if (filter[8] !== "") {
+      whereClauseFilter[Op.and].push({ status_plan_fullfillment: filter[8] });
+    }
+  }
+
+  const [employees, totalCount] = await Promise.all([
+    Employee_data.findAndCountAll({
+      limit,
+      offset,
+      where: {
+        [Op.or]: whereClauseFilter,
+      },
+    }),
+    Employee_data.findAll({
+      where: {
+        [Op.or]: whereClauseFilter,
       },
     }),
   ]);
@@ -134,4 +211,4 @@ const getTotal = async () => {
   };
 };
 
-module.exports = { inputExcel, insertData, getData, getTotal };
+module.exports = { inputExcel, insertData, getData, getFilteredData, getTotal };
