@@ -50,4 +50,12 @@ const getDivisionDescription = async () => {
   return data;
 };
 
-module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription, getDivisionDescription }
+const getStatus = async () => {
+  const data = await Employee_data.findAll({
+    attributes: [[sequelize.fn("DISTINCT", sequelize.col("status")), "status"]],
+  });
+
+  return data;
+};
+
+module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription, getDivisionDescription, getStatus }

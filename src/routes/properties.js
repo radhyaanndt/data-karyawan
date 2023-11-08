@@ -10,7 +10,7 @@ router.get("/group", propertiesController.getGroup);
 router.get("/location-description", propertiesController.getLocationDescription);
 router.get("/directorat-description", propertiesController.getDirectoratDescription);
 router.get("/division-description", propertiesController.getDivisionDescription);
-// router.get("/status", propertiesController.getRegional);
+router.get("/status", propertiesController.getStatus);
 // router.get("/position-description", propertiesController.getRegional);
 // router.get("/status-plan-fulfillment", propertiesController.getRegional);
 
