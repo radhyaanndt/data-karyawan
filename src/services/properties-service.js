@@ -10,4 +10,12 @@ const getBusinessUnit = async () => {
     return data
 }
 
-module.exports = { getBusinessUnit }
+const getRegional = async () => {
+  const data = await Employee_data.findAll({
+    attributes: [[sequelize.fn("DISTINCT", sequelize.col("regional")), "regional"]],
+  });
+
+  return data;
+};
+
+module.exports = { getBusinessUnit, getRegional }
