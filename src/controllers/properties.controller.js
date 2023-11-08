@@ -168,4 +168,25 @@ const getPositionDescription = async (req, res) => {
   }
 };
 
-module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription, getDivisionDescription, getStatus, getPositionDescription }
+const getStatusPlanFulfillment = async (req, res) => {
+  try {
+    const data = await propertiesService.getStatusPlanFulfillment();
+
+    const transformedData = data.map((item) => item.status_plan_fulfillment);
+    return res.status(200).send({
+      status: 200,
+      message: "OK",
+      data: transformedData,
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(500).send({
+        status: 500,
+        message: "Internal Server Error",
+        errors: error.message,
+      });
+    }
+  }
+};
+
+module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription, getDivisionDescription, getStatus, getPositionDescription, getStatusPlanFulfillment }
