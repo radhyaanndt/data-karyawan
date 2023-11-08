@@ -58,9 +58,9 @@ const getData = async (limit, page, search) => {
       { regional: { [Op.iLike]: `%${query}%` } },
       { position_description: { [Op.iLike]: `%${query}%` } },
       { division_description: { [Op.iLike]: `%${query}%` } },
-      { status_plan_fullfillment: { [Op.iLike]: `%${query}%` } },
+      { status_plan_fulfillment: { [Op.iLike]: `%${query}%` } },
     ],
-  }
+  };
 
   const [employees, totalCount] = await Promise.all([
     Employee_data.findAndCountAll({
@@ -77,17 +77,16 @@ const getData = async (limit, page, search) => {
     }),
   ]);
 
-
   const { rows, count } = employees;
 
   const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
   const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
   const mpe_plus_plan_count = totalCount.filter((item) => item.mpe_plus_plan === "1").length;
-  const fulfill = totalCount.filter((item) => item.status_plan_fullfillment === "FULFILL").length;
-  const vacant = totalCount.filter((item) => item.status_plan_fullfillment === "VACANT").length;
-  const closed = totalCount.filter((item) => item.status_plan_fullfillment === "CLOSED").length;
-  const over_mpp = totalCount.filter((item) => item.status_plan_fullfillment === "OVER MPP").length;
-  const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fullfillment === "FPTK OVER MPP").length;
+  const fulfill = totalCount.filter((item) => item.status_plan_fulfillment === "FULFILL").length;
+  const vacant = totalCount.filter((item) => item.status_plan_fulfillment === "VACANT").length;
+  const closed = totalCount.filter((item) => item.status_plan_fulfillment === "CLOSED").length;
+  const over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "OVER MPP").length;
+  const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "FPTK OVER MPP").length;
 
   return {
     mpp_total: mpp_count,
@@ -147,7 +146,7 @@ const getFilteredData = async (limit, page, filter) => {
     }
 
     if (filter[8] !== "") {
-      whereClauseFilter[Op.and].push({ status_plan_fullfillment: filter[8] });
+      whereClauseFilter[Op.and].push({ status_plan_fulfillment: filter[8] });
     }
   }
 
@@ -171,11 +170,11 @@ const getFilteredData = async (limit, page, filter) => {
   const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
   const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
   const mpe_plus_plan_count = totalCount.filter((item) => item.mpe_plus_plan === "1").length;
-  const fulfill = totalCount.filter((item) => item.status_plan_fullfillment === "FULFILL").length;
-  const vacant = totalCount.filter((item) => item.status_plan_fullfillment === "VACANT").length;
-  const closed = totalCount.filter((item) => item.status_plan_fullfillment === "CLOSED").length;
-  const over_mpp = totalCount.filter((item) => item.status_plan_fullfillment === "OVER MPP").length;
-  const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fullfillment === "FPTK OVER MPP").length;
+  const fulfill = totalCount.filter((item) => item.status_plan_fulfillment === "FULFILL").length;
+  const vacant = totalCount.filter((item) => item.status_plan_fulfillment === "VACANT").length;
+  const closed = totalCount.filter((item) => item.status_plan_fulfillment === "CLOSED").length;
+  const over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "OVER MPP").length;
+  const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "FPTK OVER MPP").length;
 
   return {
     mpp_total: mpp_count,

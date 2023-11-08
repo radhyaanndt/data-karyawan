@@ -81,7 +81,7 @@ module.exports = {
       mpe_plus_plan: {
         type: Sequelize.STRING,
       },
-      status_plan_fullfillment: {
+      status_plan_fulfillment: {
         type: Sequelize.STRING,
       },
       createdAt: {

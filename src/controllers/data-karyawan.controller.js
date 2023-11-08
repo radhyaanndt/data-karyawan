@@ -29,7 +29,7 @@ const inputData = async (req, res) => {
       nik_plan: item["NIK Plan"],
       nama_karyawan_plan_fulfillment: item["Nama Karyawan Plan Fulfillment"],
       mpe_plus_plan: item["MPE + Plan"],
-      status_plan_fullfillment: item["Status Plan Fulfillment"],
+      status_plan_fulfillment: item["Status Plan Fulfillment"],
     }));
 
     await dataKaryawanService.insertData(data);
@@ -87,7 +87,7 @@ const getFilteredData = async (req, res) => {
     req.query.division_description || "",
     req.query.status || "",
     req.query.position_description || "",
-    req.query.status_plan_fullfillment || "",
+    req.query.status_plan_fulfillment || "",
   ];
 
   try {
