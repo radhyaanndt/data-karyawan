@@ -83,11 +83,21 @@ const getData = async (limit, page, search) => {
   const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
   const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
   const mpe_plus_plan_count = totalCount.filter((item) => item.mpe_plus_plan === "1").length;
+  const fulfill = totalCount.filter((item) => item.status_plan_fullfillment === "FULFILL").length;
+  const vacant = totalCount.filter((item) => item.status_plan_fullfillment === "VACANT").length;
+  const closed = totalCount.filter((item) => item.status_plan_fullfillment === "CLOSED").length;
+  const over_mpp = totalCount.filter((item) => item.status_plan_fullfillment === "OVER MPP").length;
+  const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fullfillment === "FPTK OVER MPP").length;
 
   return {
     mpp_total: mpp_count,
     mpe_total: mpe_count,
     mpe_plus_plan_total: mpe_plus_plan_count,
+    fulfill: fulfill,
+    vacant: vacant,
+    closed: closed,
+    over_mpp: over_mpp,
+    fptk_over_mpp: fptk_over_mpp,
     employees: rows,
     page_size: rows.length,
     total_data: count,
@@ -161,11 +171,21 @@ const getFilteredData = async (limit, page, filter) => {
   const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
   const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
   const mpe_plus_plan_count = totalCount.filter((item) => item.mpe_plus_plan === "1").length;
+  const fulfill = totalCount.filter((item) => item.status_plan_fullfillment === "FULFILL").length;
+  const vacant = totalCount.filter((item) => item.status_plan_fullfillment === "VACANT").length;
+  const closed = totalCount.filter((item) => item.status_plan_fullfillment === "CLOSED").length;
+  const over_mpp = totalCount.filter((item) => item.status_plan_fullfillment === "OVER MPP").length;
+  const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fullfillment === "FPTK OVER MPP").length;
 
   return {
     mpp_total: mpp_count,
     mpe_total: mpe_count,
     mpe_plus_plan_total: mpe_plus_plan_count,
+    fulfill: fulfill,
+    vacant: vacant,
+    closed: closed,
+    over_mpp: over_mpp,
+    fptk_over_mpp: fptk_over_mpp,
     employees: rows,
     page_size: rows.length,
     total_data: count,
