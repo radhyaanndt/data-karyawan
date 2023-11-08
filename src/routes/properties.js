@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/business", propertiesController.getBusinessUnit);
 router.get("/regional", propertiesController.getRegional);
 router.get("/group", propertiesController.getGroup);
-// router.get("/location-description", propertiesController.getRegional);
+router.get("/location-description", propertiesController.getLocationDescription);
 // router.get("/directorat-description", propertiesController.getRegional);
 // router.get("/division-description", propertiesController.getRegional);
 // router.get("/status", propertiesController.getRegional);
