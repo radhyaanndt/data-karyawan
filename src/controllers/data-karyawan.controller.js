@@ -29,7 +29,7 @@ const inputData = async (req, res) => {
       nik_plan: item["NIK Plan"],
       nama_karyawan_plan_fulfillment: item["Nama Karyawan Plan Fulfillment"],
       mpe_plus_plan: item["MPE + Plan"],
-      status_plan_fullfillment: item["Status Plan Fulfillment"],
+      status_plan_fulfillment: item["Status Plan Fulfillment"],
     }));
 
     await dataKaryawanService.insertData(data);
@@ -51,16 +51,46 @@ const inputData = async (req, res) => {
 };
 
 const getData = async (req, res) => {
-  try {
-    const limit = parseInt(req.query.limit) || 10;
-    const page = parseInt(req.query.page) || 1;
-    const query = req.query.search || "";
-    const filter = [
-      req.query.business_unit_description || "",
-      req.query.regional || "",
-    ];
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  const query = req.query.search || "";
 
-    const employees = await dataKaryawanService.getData(limit, page, query, filter);
+  try {
+    const employees = await dataKaryawanService.getData(limit, page, query);
+
+    return res.status(200).send({
+      status: 200,
+      message: "OK",
+      data: employees,
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(500).send({
+        status: 500,
+        message: "Internal Server Error",
+        errors: error.message,
+      });
+    }
+  }
+};
+
+const getFilteredData = async (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  const filter = [
+    req.query.business_unit_description || "",
+    req.query.regional || "",
+    req.query.group || "",
+    req.query.location_description || "",
+    req.query.directorat_description || "",
+    req.query.division_description || "",
+    req.query.status || "",
+    req.query.position_description || "",
+    req.query.status_plan_fulfillment || "",
+  ];
+
+  try {
+    const employees = await dataKaryawanService.getFilteredData(limit, page, filter);
 
     return res.status(200).send({
       status: 200,
@@ -96,6 +126,6 @@ const getTotal = async (req, res) => {
       });
     }
   }
-}
+};
 
-module.exports = { inputData, getData, getTotal };
+module.exports = { inputData, getData, getTotal, getFilteredData };
