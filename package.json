@@ -7,6 +7,7 @@
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
     "sq:cms": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "db:setup": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
     "vercel-build": "echo hello"
   },
   "author": "",
