@@ -48,65 +48,9 @@ const insertData = async (data) => {
   await Employee_data.bulkCreate(data);
 };
 
-const getData = async (limit, page, search) => {
+const getData = async (limit, page, search, filter) => {
   const offset = (page - 1) * limit;
   const query = search;
-
-  const whereClause = {
-    [Op.or]: [
-      { name: { [Op.iLike]: `%${query}%` } },
-      { regional: { [Op.iLike]: `%${query}%` } },
-      { directorat_description: { [Op.iLike]: `%${query}%` } },
-      { position_description: { [Op.iLike]: `%${query}%` } },
-      { status_plan_fulfillment: { [Op.iLike]: `%${query}%` } },
-    ],
-  };
-
-  const [employees, totalCount] = await Promise.all([
-    Employee_data.findAndCountAll({
-      limit,
-      offset,
-      where: {
-        [Op.or]: [whereClause],
-      },
-    }),
-    Employee_data.findAll({
-      where: {
-        [Op.or]: [whereClause],
-      },
-    }),
-  ]);
-
-  const { rows, count } = employees;
-
-  const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
-  const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
-  const mpe_plus_plan_count = totalCount.filter((item) => item.mpe_plus_plan === "1").length;
-  const fulfill = totalCount.filter((item) => item.status_plan_fulfillment === "FULFILL").length;
-  const vacant = totalCount.filter((item) => item.status_plan_fulfillment === "VACANT").length;
-  const closed = totalCount.filter((item) => item.status_plan_fulfillment === "CLOSED").length;
-  const over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "OVER MPP").length;
-  const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "FPTK OVER MPP").length;
-
-  return {
-    mpp_total: mpp_count,
-    mpe_total: mpe_count,
-    mpe_plus_plan_total: mpe_plus_plan_count,
-    fulfill: fulfill,
-    vacant: vacant,
-    closed: closed,
-    over_mpp: over_mpp,
-    fptk_over_mpp: fptk_over_mpp,
-    employees: rows,
-    page_size: rows.length,
-    total_data: count,
-    current_page: page,
-    max_page: Math.ceil(count / limit),
-  };
-};
-
-const getFilteredData = async (limit, page, filter) => {
-  const offset = (page - 1) * limit;
 
   const whereClauseFilter = {};
 
@@ -150,17 +94,31 @@ const getFilteredData = async (limit, page, filter) => {
     }
   }
 
+  const whereClause = {
+    [Op.or]: [
+      { name: { [Op.iLike]: `%${query}%` } },
+      { regional: { [Op.iLike]: `%${query}%` } },
+      { directorat_description: { [Op.iLike]: `%${query}%` } },
+      { position_description: { [Op.iLike]: `%${query}%` } },
+      { status_plan_fulfillment: { [Op.iLike]: `%${query}%` } },
+    ],
+  };
+
+  
+
   const [employees, totalCount] = await Promise.all([
     Employee_data.findAndCountAll({
       limit,
       offset,
       where: {
-        [Op.or]: whereClauseFilter,
+        ...whereClause,
+        ...whereClauseFilter,
       },
     }),
     Employee_data.findAll({
       where: {
-        [Op.or]: whereClauseFilter,
+        ...whereClause,
+        ...whereClauseFilter,
       },
     }),
   ]);
@@ -230,4 +188,4 @@ const getTotal = async () => {
   };
 };
 
-module.exports = { inputExcel, insertData, getData, getFilteredData, getTotal };
+module.exports = { inputExcel, insertData, getData, getTotal };
