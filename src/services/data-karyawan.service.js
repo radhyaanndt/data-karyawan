@@ -54,7 +54,7 @@ const getData = async (limit, page, search, filter) => {
 
   const whereClauseFilter = {};
 
-  if (filter[0] !== "" || filter[1] !== "") {
+  if (filter[0] !== "" || filter[1] !== "" || filter[2] !== "" || filter[3] !== ""|| filter[4] !== "" || filter[5] !== "" || filter[6] !== "" || filter[7] !== "" || filter[8] !== "") {
     whereClauseFilter[Op.and] = [];
 
     if (filter[0] !== "") {
@@ -103,8 +103,6 @@ const getData = async (limit, page, search, filter) => {
       { status_plan_fulfillment: { [Op.iLike]: `%${query}%` } },
     ],
   };
-
-  
 
   const [employees, totalCount] = await Promise.all([
     Employee_data.findAndCountAll({
