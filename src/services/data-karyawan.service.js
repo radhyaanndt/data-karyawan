@@ -1435,10 +1435,15 @@ const getData = async (limit, page, search, filter) => {
   ).length;
 
   return {
-    filter: {},
-    mpp_total: mpp_count,
-    mpe_total: mpe_count,
-    mpe_plus_plan_total: mpe_plus_plan_count,
+    filter: [
+      { 
+        TOTAL: {
+        mpp_total: mpp_count,
+        mpe_total: mpe_count,
+        mpe_plus_plan_total: mpe_plus_plan_count,
+        }
+      }
+    ],
     fulfill: fulfill,
     vacant: vacant,
     closed: closed,
