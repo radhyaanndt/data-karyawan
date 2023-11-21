@@ -128,35 +128,118 @@ const getData = async (limit, page, search, filter) => {
 
   // regional
   if (filter[1] == "KALBAR") {
-    const mpp_count_abm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ABM").length;
-    const mpp_count_ats = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ATS").length;
-    const mpp_count_bsm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BSM").length;
-    const mpe_count_abm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ABM").length;
-    const mpe_count_ats = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ATS").length;
-    const mpe_count_bsm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BSM").length;
-    const mpe_plus_plan_count_abm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ABM").length;
-    const mpe_plus_plan_count_ats = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ATS").length;
-    const mpe_plus_plan_count_bsm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BSM").length;
+    const locationTypes = ["ABM", "ATS", "BSM"];
+  
+    const result = {
+      ABM: {},
+      ATS: {},
+      BSM: {},
+      fulfill: 0,
+      vacant: 0,
+      closed: 0,
+      over_mpp: 0,
+      fptk_over_mpp: 0,
+      employees: rows,
+      page_size: rows.length,
+      total_data: count,
+      current_page: page,
+      max_page: Math.ceil(count / limit),
+    };
+  
+    locationTypes.forEach(location => {
+      const mppCount = totalCount.filter(item => item.mpp === "1" && item.location_description === location).length;
+      const mpeCount = totalCount.filter(item => item.mpe === "1" && item.location_description === location).length;
+      const mpePlusPlanCount = totalCount.filter(item => item.mpe_plus_plan === "1" && item.location_description === location).length;
+  
+      result[location] = {
+        mpp_total: mppCount,
+        mpe_total: mpeCount,
+        mpe_plus_plan_total: mpePlusPlanCount,
+      };
+    });
+  
+    result.fulfill = totalCount.filter(item => item.status_plan_fulfillment === "FULFILL").length;
+    result.vacant = totalCount.filter(item => item.status_plan_fulfillment === "VACANT").length;
+    result.closed = totalCount.filter(item => item.status_plan_fulfillment === "CLOSED").length;
+    result.over_mpp = totalCount.filter(item => item.status_plan_fulfillment === "OVER MPP").length;
+    result.fptk_over_mpp = totalCount.filter(item => item.status_plan_fulfillment === "FPTK OVER MPP").length;
+  
+    return result;
+  } 
+
+  if (filter[1] == "SUMATERA") {
+    const mpp_count_batang = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BBB - BATANG HARI").length;
+    const mpp_count_inti = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BBB - INTI").length;
+    const mpp_count_karet = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BBB - KARET").length;
+    const mpp_count_mill = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BBB - MILL").length;
+    const mpp_count_plasma = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BBB - PLASMA 1 & 2").length;
+    const mpp_count_trading = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BBB - TRADING").length;
+    const mpp_count_head = totalCount.filter((item) => item.mpp === "1" && item.location_description == "HEAD OFFICE - BBB").length;
+    const mpp_count_region = totalCount.filter((item) => item.mpp === "1" && item.location_description == "REGION OFFICE SUMATERA").length;
+
+    const mpe_count_batang = totalCount.filter((item) => item.mpe === "1" && item.location_description == "BBB - BATANG HARI").length;
+    const mpe_count_inti = totalCount.filter((item) => item.mpe === "1" && item.location_description == "BBB - INTI").length;
+    const mpe_count_karet = totalCount.filter((item) => item.mpe === "1" && item.location_description == "BBB - KARET").length;
+    const mpe_count_mill = totalCount.filter((item) => item.mpe === "1" && item.location_description == "BBB - MILL").length;
+    const mpe_count_plasma = totalCount.filter((item) => item.mpe === "1" && item.location_description == "BBB - PLASMA 1 & 2").length;
+    const mpe_count_trading = totalCount.filter((item) => item.mpe === "1" && item.location_description == "BBB - TRADING").length;
+    const mpe_count_head = totalCount.filter((item) => item.mpe === "1" && item.location_description == "HEAD OFFICE - BBB").length;
+    const mpe_count_region = totalCount.filter((item) => item.mpe === "1" && item.location_description == "REGION OFFICE SUMATERA").length;
+
+    const mpe_plus_plan_count_batang = totalCount.filter((item) => item.mpe_plus_plan === "1" && item.location_description == "BBB - BATANG HARI").length;
+    const mpe_plus_plan_count_inti = totalCount.filter((item) => item.mpe_plus_plan === "1" && item.location_description == "BBB - INTI").length;
+    const mpe_plus_plan_count_karet = totalCount.filter((item) => item.mpe_plus_plan === "1" && item.location_description == "BBB - KARET").length;
+    const mpe_plus_plan_count_mill = totalCount.filter((item) => item.mpe_plus_plan === "1" && item.location_description == "BBB - MILL").length;
+    const mpe_plus_plan_count_plasma = totalCount.filter((item) => item.mpe_plus_plan === "1" && item.location_description == "BBB - PLASMA 1 & 2").length;
+    const mpe_plus_plan_count_trading = totalCount.filter((item) => item.mpe_plus_plan === "1" && item.location_description == "BBB - TRADING").length;
+    const mpe_plus_plan_count_head = totalCount.filter((item) => item.mpe_plus_plan === "1" && item.location_description == "HEAD OFFICE - BBB").length;
+    const mpe_plus_plan_count_region = totalCount.filter((item) => item.mpe_plus_plan === "1" && item.location_description == "REGION OFFICE SUMATERA").length;
+
     const fulfill = totalCount.filter((item) => item.status_plan_fulfillment === "FULFILL").length;
     const vacant = totalCount.filter((item) => item.status_plan_fulfillment === "VACANT").length;
     const closed = totalCount.filter((item) => item.status_plan_fulfillment === "CLOSED").length;
     const over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "OVER MPP").length;
     const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "FPTK OVER MPP").length;
     return {
-      ABM: {
-        mpp_total: mpp_count_abm,
-        mpe_total: mpe_count_abm,
-        mpe_plus_plan_total: mpe_plus_plan_count_abm,
+      BATANG_HARI: {
+        mpp_total: mpp_count_batang,
+        mpe_total: mpe_count_batang,
+        mpe_plus_plan_total: mpe_plus_plan_count_batang,
       },
-      ATS: {
-        mpp_total: mpp_count_ats,
-        mpe_total: mpe_count_ats,
-        mpe_plus_plan_total: mpe_plus_plan_count_ats,
+      INTI: {
+        mpp_total: mpp_count_inti,
+        mpe_total: mpe_count_inti,
+        mpe_plus_plan_total: mpe_plus_plan_count_inti,
       },
-      BSM:{
-        mpp_total: mpp_count_bsm,
-        mpe_total: mpe_count_bsm,
-        mpe_plus_plan_total: mpe_plus_plan_count_bsm,
+      KARET:{
+        mpp_total: mpp_count_karet,
+        mpe_total: mpe_count_karet,
+        mpe_plus_plan_total: mpe_plus_plan_count_karet,
+      },
+      MILL:{
+        mpp_total: mpp_count_mill,
+        mpe_total: mpe_count_mill,
+        mpe_plus_plan_total: mpe_plus_plan_count_mill,
+      },
+      PLASMA:{
+        mpp_total: mpp_count_plasma,
+        mpe_total: mpe_count_plasma,
+        mpe_plus_plan_total: mpe_plus_plan_count_plasma,
+      },
+      TRADING:{
+        mpp_total: mpp_count_trading,
+        mpe_total: mpe_count_trading,
+        mpe_plus_plan_total: mpe_plus_plan_count_trading,
+      },
+      HO_BBB:{
+        mpp_total: mpp_count_head,
+        mpe_total: mpe_count_head,
+        mpe_plus_plan_total: mpe_plus_plan_count_head,
+      },
+      RO_SUMATERA:{
+        mpp_total: mpp_count_region,
+        mpe_total: mpe_count_region,
+        mpe_plus_plan_total: mpe_plus_plan_count_region,
       },
       fulfill: fulfill,
       vacant: vacant,
@@ -170,6 +253,7 @@ const getData = async (limit, page, search, filter) => {
       max_page: Math.ceil(count / limit),
     }
   }
+  
   const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
   const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
   const mpe_plus_plan_count = totalCount.filter((item) => item.mpe_plus_plan === "1").length;
