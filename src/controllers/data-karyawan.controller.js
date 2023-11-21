@@ -105,4 +105,31 @@ const getTotal = async (req, res) => {
   }
 };
 
-module.exports = { inputData, getData, getTotal };
+const deleteData = async (req, res) => {
+  try {
+    const targetTimestamp = new Date(req.query.targetTimestamp);
+
+    const result = await dataKaryawanService.deleteData(targetTimestamp);
+
+    if (result > 0) {
+      return res.status(200).send({ 
+        status: 200,
+        message: 'Data Deleted',
+      });
+    } else {
+      res.status(404).send({
+        status: 404,
+        message: 'No data met the criteria for deletion',
+      });
+    }
+  } catch (error) {
+    return res.status(500).send({
+      status: 500,
+      message: "Internal Server Error",
+      errors: error.message,
+    });
+  }
+
+}
+
+module.exports = { inputData, getData, getTotal, deleteData };
