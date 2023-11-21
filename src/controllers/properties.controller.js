@@ -5,6 +5,7 @@ const getBusinessUnit = async (req, res) => {
     const data = await propertiesService.getBusinessUnit();
 
     const transformedData = data.map((item) => item.business_unit_description);
+    transformedData.push("");
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -26,6 +27,7 @@ const getRegional = async (req, res) => {
     const data = await propertiesService.getRegional();
 
     const transformedData = data.map((item) => item.regional);
+    transformedData.push("");
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -47,6 +49,7 @@ const getGroup = async (req, res) => {
     const data = await propertiesService.getGroup();
 
     const transformedData = data.map((item) => item.group);
+    transformedData.push("");
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -68,6 +71,7 @@ const getLocationDescription = async (req, res) => {
     const data = await propertiesService.getLocationDescription();
 
     const transformedData = data.map((item) => item.location_description);
+    transformedData.push("");
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -89,6 +93,7 @@ const getDirectoratDescription = async (req, res) => {
     const data = await propertiesService.getDirectoratDescription();
 
     const transformedData = data.map((item) => item.directorat_description);
+    transformedData.push("");
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -110,6 +115,7 @@ const getDivisionDescription = async (req, res) => {
     const data = await propertiesService.getDivisionDescription();
 
     const transformedData = data.map((item) => item.division_description);
+    transformedData.push("");
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -131,6 +137,7 @@ const getStatus = async (req, res) => {
     const data = await propertiesService.getStatus();
 
     const transformedData = data.map((item) => item.status);
+    transformedData.push("");
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -152,6 +159,7 @@ const getPositionDescription = async (req, res) => {
     const data = await propertiesService.getPositionDescription();
 
     const transformedData = data.map((item) => item.position_description);
+    transformedData.push("");
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -173,6 +181,7 @@ const getStatusPlanFulfillment = async (req, res) => {
     const data = await propertiesService.getStatusPlanFulfillment();
 
     const transformedData = data.map((item) => item.status_plan_fulfillment);
+    transformedData.push("");
     return res.status(200).send({
       status: 200,
       message: "OK",
