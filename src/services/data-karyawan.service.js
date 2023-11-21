@@ -54,6 +54,7 @@ const getData = async (limit, page, search, filter) => {
 
   const whereClauseFilter = {};
 
+
   if (filter[0] !== "" || filter[1] !== "" || filter[2] !== "" || filter[3] !== ""|| filter[4] !== "" || filter[5] !== "" || filter[6] !== "" || filter[7] !== "" || filter[8] !== "") {
     whereClauseFilter[Op.and] = [];
 
@@ -93,7 +94,7 @@ const getData = async (limit, page, search, filter) => {
       whereClauseFilter[Op.and].push({ status_plan_fulfillment: filter[8] });
     }
   }
-
+  
   const whereClause = {
     [Op.or]: [
       { name: { [Op.iLike]: `%${query}%` } },
@@ -103,11 +104,13 @@ const getData = async (limit, page, search, filter) => {
       { status_plan_fulfillment: { [Op.iLike]: `%${query}%` } },
     ],
   };
-
+  
+  
   const [employees, totalCount] = await Promise.all([
     Employee_data.findAndCountAll({
       limit,
       offset,
+      attributes: { exclude: ['deletedAt'] },
       where: {
         ...whereClause,
         ...whereClauseFilter,
@@ -120,9 +123,53 @@ const getData = async (limit, page, search, filter) => {
       },
     }),
   ]);
-
+  
   const { rows, count } = employees;
 
+  // regional
+  if (filter[1] == "KALBAR") {
+    const mpp_count_abm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ABM").length;
+    const mpp_count_ats = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ATS").length;
+    const mpp_count_bsm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BSM").length;
+    const mpe_count_abm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ABM").length;
+    const mpe_count_ats = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ATS").length;
+    const mpe_count_bsm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BSM").length;
+    const mpe_plus_plan_count_abm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ABM").length;
+    const mpe_plus_plan_count_ats = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ATS").length;
+    const mpe_plus_plan_count_bsm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BSM").length;
+    const fulfill = totalCount.filter((item) => item.status_plan_fulfillment === "FULFILL").length;
+    const vacant = totalCount.filter((item) => item.status_plan_fulfillment === "VACANT").length;
+    const closed = totalCount.filter((item) => item.status_plan_fulfillment === "CLOSED").length;
+    const over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "OVER MPP").length;
+    const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "FPTK OVER MPP").length;
+    return {
+      ABM: {
+        mpp_total: mpp_count_abm,
+        mpe_total: mpe_count_abm,
+        mpe_plus_plan_total: mpe_plus_plan_count_abm,
+      },
+      ATS: {
+        mpp_total: mpp_count_ats,
+        mpe_total: mpe_count_ats,
+        mpe_plus_plan_total: mpe_plus_plan_count_ats,
+      },
+      BSM:{
+        mpp_total: mpp_count_bsm,
+        mpe_total: mpe_count_bsm,
+        mpe_plus_plan_total: mpe_plus_plan_count_bsm,
+      },
+      fulfill: fulfill,
+      vacant: vacant,
+      closed: closed,
+      over_mpp: over_mpp,
+      fptk_over_mpp: fptk_over_mpp,
+      employees: rows,
+      page_size: rows.length,
+      total_data: count,
+      current_page: page,
+      max_page: Math.ceil(count / limit),
+    }
+  }
   const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
   const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
   const mpe_plus_plan_count = totalCount.filter((item) => item.mpe_plus_plan === "1").length;
@@ -131,7 +178,7 @@ const getData = async (limit, page, search, filter) => {
   const closed = totalCount.filter((item) => item.status_plan_fulfillment === "CLOSED").length;
   const over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "OVER MPP").length;
   const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "FPTK OVER MPP").length;
-
+  
   return {
     mpp_total: mpp_count,
     mpe_total: mpe_count,
@@ -186,4 +233,20 @@ const getTotal = async () => {
   };
 };
 
-module.exports = { inputExcel, insertData, getData, getTotal };
+const deleteData = async (targetTimestamp) => {
+  console.log("masok", targetTimestamp);
+  if (!targetTimestamp || targetTimestamp == 'Invalid Date') {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid date format");
+  }
+    const result = await Employee_data.destroy({
+      where: {
+        createdAt: {
+          [Op.lt]: targetTimestamp,
+        },
+      },
+    });
+
+    return result;
+}
+
+module.exports = { inputExcel, insertData, getData, getTotal, deleteData };
