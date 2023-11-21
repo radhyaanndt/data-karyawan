@@ -234,7 +234,7 @@ const getTotal = async () => {
 };
 
 const deleteData = async (targetTimestamp) => {
-  console.log("masok", targetTimestamp);
+  
   if (!targetTimestamp || targetTimestamp == 'Invalid Date') {
     throw new ApiError(httpStatus.BAD_REQUEST, "Invalid date format");
   }
