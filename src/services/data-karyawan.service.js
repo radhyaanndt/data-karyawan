@@ -1327,6 +1327,92 @@ const getData = async (limit, page, search, filter) => {
     };
   }
 
+  if (filter[1] == "HEAD OFFICE") {
+    const divisions = [
+      "OPERATIONAL DEVELOPMENT & MECHANIZATION DIVISION",
+      "MILL DEVELOPMENT DIVISION",
+      "TRADING & LOGISTIC DIVISION",
+      "RESTORATION AND CARBON TRADING DIVISION",
+      "IT & BP DIVISION",
+      "COMMERCIAL FFB DIVISION",
+      "INFRASTRUCTURE & WORKSHOP DIVISION",
+      "REGION - SUMATERA",
+      "ESTATE DIRECTORATE",
+      "MILL DIRECTORATE",
+      "EXTERNAL RELATION PROJECT DIVISION",
+      "EXTERNAL RELATION DIVISION",
+      "HC OPERATION DIVISION",
+      "TAX DIVISION",
+      "CORPORATE SECRETARY DIRECTORATE",
+      "HC DEVELOPMENT DIVISION",
+      "DOC., LICENSE & CSR DIVISION - KALTIM",
+      "CEO",
+      "SURVEY DIVISION",
+      "REGION - KALTIM III",
+      "FINANCE DIRECTORATE",
+      "PROCUREMENT DIVISION",
+      "EXTERNAL RELATION DIRECTORATE",
+      "CORPORATE AUDIT DIVISION",
+      "REGION - KALTIM",
+      "HUMAN CAPITAL DIRECTORATE",
+      "OPERATION DIRECTORATE",
+      "GOVERNMENT & ASSOCIATION DIVISION",
+      "RESEARCH & DEVELOPMENT DIVISION",
+      "MILL OPERATION DIVISION",
+      "CSR, PLASMA & DOC. LIC. DIVISION - KALTENG & SUMATERA",
+      "ACCOUNTING & BUDGET DIVISION",
+      "SUSTAINABILITY, TRADING & DOWNSTREAM DIRECTORATE",
+      "CORPORATE FINANCE & FUNDING DIRECTORATE",
+      "PLANTATION CONTROLLER DIVISION",
+      "SUSTAINABILITY DIVISION",
+      "CPO DIVISION",
+      "HC EXCELLENCE CENTER DIVISION",
+      "SUSTAINABILITY DIRECTORATE",
+      "IT & BP DIRECTORATE",
+      "REGION - KALTENG",
+      "FFB SOURCING DIVISION",
+      "FINANCE DIVISION",
+      "MARKETING DIRECTORATE"
+  ]
+
+  const filter = divisions.map(division => {
+    const key = division.replace(/[\s&-]+/g, '_'); // Replace spaces with underscores
+    const mppCount = totalCount.filter(item => item.mpp === "1" && item.division_description === division).length;
+    const mpeCount = totalCount.filter(item => item.mpe === "1" && item.division_description === division).length;
+    const mpePlusPlanCount = totalCount.filter(item => item.mpe_plus_plan === "1" && item.division_description === division).length;
+  
+    return {
+      [key]: {
+        mpp_total: mppCount,
+        mpe_total: mpeCount,
+        mpe_plus_plan_total: mpePlusPlanCount,
+      },
+    };
+  });
+
+  const result = {
+    filter,
+    fulfill: 0,
+    vacant: 0,
+    closed: 0,
+    over_mpp: 0,
+    fptk_over_mpp: 0,
+    employees: rows,
+    page_size: rows.length,
+    total_data: count,
+    current_page: page,
+    max_page: Math.ceil(count / limit),
+  };
+
+  result.fulfill = totalCount.filter(item => item.status_plan_fulfillment === "FULFILL").length;
+  result.vacant = totalCount.filter(item => item.status_plan_fulfillment === "VACANT").length;
+  result.closed = totalCount.filter(item => item.status_plan_fulfillment === "CLOSED").length;
+  result.over_mpp = totalCount.filter(item => item.status_plan_fulfillment === "OVER MPP").length;
+  result.fptk_over_mpp = totalCount.filter(item => item.status_plan_fulfillment === "FPTK OVER MPP").length;
+
+  return result;
+  }
+
   const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
   const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
   const mpe_plus_plan_count = totalCount.filter(
