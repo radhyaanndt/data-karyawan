@@ -158,7 +158,7 @@ const getData = async (limit, page, search, filter) => {
       (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
     ).length;
 
-    const mpeVsMpp = totalCount.filter(value => value.mpe_vs_mpp !== "0%");
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
     const parsePercentage = (percentage) => parseFloat(percentage);
     const totalValue = mpeVsMpp.reduce((total, value) => {
       return total + parsePercentage(value.mpe_vs_mpp);
@@ -178,40 +178,40 @@ const getData = async (limit, page, search, filter) => {
       total_data: count,
       current_page: page,
       max_page: Math.ceil(count / limit),
-    }
+    };
 
     const locationCounts = {};
 
-  totalCount.forEach(item => {
-    const location = item.location_description;
+    totalCount.forEach((item) => {
+      const location = item.location_description;
 
-    if (!locationCounts[location]) {
-      locationCounts[location] = {
-        mpp_total: 0,
-        mpe_total: 0,
-        mpe_plus_plan_total: 0,
-      };
-    }
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
 
-    locationCounts[location].mpp_total += parseInt(item.mpp);
-    locationCounts[location].mpe_total += parseInt(item.mpe);
-    locationCounts[location].mpe_plus_plan_total += parseInt(item.mpe_plus_plan);
-  });
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
 
-  for (const location in locationCounts) {
-    const locationObject = {
-      locations: {
+    for (const location in locationCounts) {
+      const locationObject = {
         location,
         mpp_total: locationCounts[location].mpp_total,
         mpe_total: locationCounts[location].mpe_total,
         mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
-      },
-    };
+      };
 
-    response.filter.push(locationObject);
-  }
+      response.filter.push(locationObject);
+    }
 
-  return response;
+    return response;
   }
 
   if (filter[1] == "SUMATERA") {
@@ -231,7 +231,7 @@ const getData = async (limit, page, search, filter) => {
       (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
     ).length;
 
-    const mpeVsMpp = totalCount.filter(value => value.mpe_vs_mpp !== "0%");
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
     const parsePercentage = (percentage) => parseFloat(percentage);
     const totalValue = mpeVsMpp.reduce((total, value) => {
       return total + parsePercentage(value.mpe_vs_mpp);
@@ -251,40 +251,40 @@ const getData = async (limit, page, search, filter) => {
       total_data: count,
       current_page: page,
       max_page: Math.ceil(count / limit),
-    }
+    };
 
     const locationCounts = {};
 
-  totalCount.forEach(item => {
-    const location = item.location_description;
+    totalCount.forEach((item) => {
+      const location = item.location_description;
 
-    if (!locationCounts[location]) {
-      locationCounts[location] = {
-        mpp_total: 0,
-        mpe_total: 0,
-        mpe_plus_plan_total: 0,
-      };
-    }
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
 
-    locationCounts[location].mpp_total += parseInt(item.mpp);
-    locationCounts[location].mpe_total += parseInt(item.mpe);
-    locationCounts[location].mpe_plus_plan_total += parseInt(item.mpe_plus_plan);
-  });
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
 
-  for (const location in locationCounts) {
-    const locationObject = {
-      locations: {
+    for (const location in locationCounts) {
+      const locationObject = {
         location,
         mpp_total: locationCounts[location].mpp_total,
         mpe_total: locationCounts[location].mpe_total,
         mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
-      },
-    };
+      };
 
-    response.filter.push(locationObject);
-  }
+      response.filter.push(locationObject);
+    }
 
-  return response;
+    return response;
   }
 
   if (filter[1] == "KALTENG") {
@@ -304,7 +304,7 @@ const getData = async (limit, page, search, filter) => {
       (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
     ).length;
 
-    const mpeVsMpp = totalCount.filter(value => value.mpe_vs_mpp !== "0%");
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
     const parsePercentage = (percentage) => parseFloat(percentage);
     const totalValue = mpeVsMpp.reduce((total, value) => {
       return total + parsePercentage(value.mpe_vs_mpp);
@@ -324,40 +324,40 @@ const getData = async (limit, page, search, filter) => {
       total_data: count,
       current_page: page,
       max_page: Math.ceil(count / limit),
-    }
+    };
 
     const locationCounts = {};
 
-  totalCount.forEach(item => {
-    const location = item.location_description;
+    totalCount.forEach((item) => {
+      const location = item.location_description;
 
-    if (!locationCounts[location]) {
-      locationCounts[location] = {
-        mpp_total: 0,
-        mpe_total: 0,
-        mpe_plus_plan_total: 0,
-      };
-    }
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
 
-    locationCounts[location].mpp_total += parseInt(item.mpp);
-    locationCounts[location].mpe_total += parseInt(item.mpe);
-    locationCounts[location].mpe_plus_plan_total += parseInt(item.mpe_plus_plan);
-  });
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
 
-  for (const location in locationCounts) {
-    const locationObject = {
-      locations: {
+    for (const location in locationCounts) {
+      const locationObject = {
         location,
         mpp_total: locationCounts[location].mpp_total,
         mpe_total: locationCounts[location].mpe_total,
         mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
-      },
-    };
+      };
 
-    response.filter.push(locationObject);
-  }
+      response.filter.push(locationObject);
+    }
 
-  return response;
+    return response;
   }
 
   if (filter[1] == "KALTIM I") {
@@ -377,7 +377,7 @@ const getData = async (limit, page, search, filter) => {
       (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
     ).length;
 
-    const mpeVsMpp = totalCount.filter(value => value.mpe_vs_mpp !== "0%");
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
     const parsePercentage = (percentage) => parseFloat(percentage);
     const totalValue = mpeVsMpp.reduce((total, value) => {
       return total + parsePercentage(value.mpe_vs_mpp);
@@ -397,40 +397,40 @@ const getData = async (limit, page, search, filter) => {
       total_data: count,
       current_page: page,
       max_page: Math.ceil(count / limit),
-    }
+    };
 
     const locationCounts = {};
 
-  totalCount.forEach(item => {
-    const location = item.location_description;
+    totalCount.forEach((item) => {
+      const location = item.location_description;
 
-    if (!locationCounts[location]) {
-      locationCounts[location] = {
-        mpp_total: 0,
-        mpe_total: 0,
-        mpe_plus_plan_total: 0,
-      };
-    }
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
 
-    locationCounts[location].mpp_total += parseInt(item.mpp);
-    locationCounts[location].mpe_total += parseInt(item.mpe);
-    locationCounts[location].mpe_plus_plan_total += parseInt(item.mpe_plus_plan);
-  });
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
 
-  for (const location in locationCounts) {
-    const locationObject = {
-      locations: {
+    for (const location in locationCounts) {
+      const locationObject = {
         location,
         mpp_total: locationCounts[location].mpp_total,
         mpe_total: locationCounts[location].mpe_total,
         mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
-      },
-    };
+      };
 
-    response.filter.push(locationObject);
-  }
+      response.filter.push(locationObject);
+    }
 
-  return response;
+    return response;
   }
 
   if (filter[1] == "KALTIM II") {
@@ -450,7 +450,7 @@ const getData = async (limit, page, search, filter) => {
       (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
     ).length;
 
-    const mpeVsMpp = totalCount.filter(value => value.mpe_vs_mpp !== "0%");
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
     const parsePercentage = (percentage) => parseFloat(percentage);
     const totalValue = mpeVsMpp.reduce((total, value) => {
       return total + parsePercentage(value.mpe_vs_mpp);
@@ -470,40 +470,40 @@ const getData = async (limit, page, search, filter) => {
       total_data: count,
       current_page: page,
       max_page: Math.ceil(count / limit),
-    }
+    };
 
     const locationCounts = {};
 
-  totalCount.forEach(item => {
-    const location = item.location_description;
+    totalCount.forEach((item) => {
+      const location = item.location_description;
 
-    if (!locationCounts[location]) {
-      locationCounts[location] = {
-        mpp_total: 0,
-        mpe_total: 0,
-        mpe_plus_plan_total: 0,
-      };
-    }
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
 
-    locationCounts[location].mpp_total += parseInt(item.mpp);
-    locationCounts[location].mpe_total += parseInt(item.mpe);
-    locationCounts[location].mpe_plus_plan_total += parseInt(item.mpe_plus_plan);
-  });
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
 
-  for (const location in locationCounts) {
-    const locationObject = {
-      locations: {
+    for (const location in locationCounts) {
+      const locationObject = {
         location,
         mpp_total: locationCounts[location].mpp_total,
         mpe_total: locationCounts[location].mpe_total,
         mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
-      },
-    };
+      };
 
-    response.filter.push(locationObject);
-  }
+      response.filter.push(locationObject);
+    }
 
-  return response;
+    return response;
   }
 
   if (filter[1] == "KALTIM III") {
@@ -523,7 +523,7 @@ const getData = async (limit, page, search, filter) => {
       (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
     ).length;
 
-    const mpeVsMpp = totalCount.filter(value => value.mpe_vs_mpp !== "0%");
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
     const parsePercentage = (percentage) => parseFloat(percentage);
     const totalValue = mpeVsMpp.reduce((total, value) => {
       return total + parsePercentage(value.mpe_vs_mpp);
@@ -543,40 +543,40 @@ const getData = async (limit, page, search, filter) => {
       total_data: count,
       current_page: page,
       max_page: Math.ceil(count / limit),
-    }
+    };
 
     const locationCounts = {};
 
-  totalCount.forEach(item => {
-    const location = item.location_description;
+    totalCount.forEach((item) => {
+      const location = item.location_description;
 
-    if (!locationCounts[location]) {
-      locationCounts[location] = {
-        mpp_total: 0,
-        mpe_total: 0,
-        mpe_plus_plan_total: 0,
-      };
-    }
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
 
-    locationCounts[location].mpp_total += parseInt(item.mpp);
-    locationCounts[location].mpe_total += parseInt(item.mpe);
-    locationCounts[location].mpe_plus_plan_total += parseInt(item.mpe_plus_plan);
-  });
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
 
-  for (const location in locationCounts) {
-    const locationObject = {
-      locations: {
+    for (const location in locationCounts) {
+      const locationObject = {
         location,
         mpp_total: locationCounts[location].mpp_total,
         mpe_total: locationCounts[location].mpe_total,
         mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
-      },
-    };
+      };
 
-    response.filter.push(locationObject);
-  }
+      response.filter.push(locationObject);
+    }
 
-  return response;
+    return response;
   }
 
   if (filter[1] == "HEAD OFFICE") {
@@ -596,7 +596,7 @@ const getData = async (limit, page, search, filter) => {
       (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
     ).length;
 
-    const mpeVsMpp = totalCount.filter(value => value.mpe_vs_mpp !== "0%");
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
     const parsePercentage = (percentage) => parseFloat(percentage);
     const totalValue = mpeVsMpp.reduce((total, value) => {
       return total + parsePercentage(value.mpe_vs_mpp);
@@ -616,43 +616,43 @@ const getData = async (limit, page, search, filter) => {
       total_data: count,
       current_page: page,
       max_page: Math.ceil(count / limit),
-    }
+    };
 
     const locationCounts = {};
 
-  totalCount.forEach(item => {
-    const location = item.division_description;
+    totalCount.forEach((item) => {
+      const location = item.division_description;
 
-    if (!locationCounts[location]) {
-      locationCounts[location] = {
-        mpp_total: 0,
-        mpe_total: 0,
-        mpe_plus_plan_total: 0,
-      };
-    }
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
 
-    locationCounts[location].mpp_total += parseInt(item.mpp);
-    locationCounts[location].mpe_total += parseInt(item.mpe);
-    locationCounts[location].mpe_plus_plan_total += parseInt(item.mpe_plus_plan);
-  });
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
 
-  for (const location in locationCounts) {
-    const locationObject = {
-      locations: {
+    for (const location in locationCounts) {
+      const locationObject = {
         location,
         mpp_total: locationCounts[location].mpp_total,
         mpe_total: locationCounts[location].mpe_total,
         mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
-      },
-    };
+      };
 
-    response.filter.push(locationObject);
+      response.filter.push(locationObject);
+    }
+
+    return response;
   }
 
-  return response;
-  }
-
-  const mpeVsMpp = totalCount.filter(value => value.mpe_vs_mpp !== "0%");
+  const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
   const parsePercentage = (percentage) => parseFloat(percentage);
   const totalValue = mpeVsMpp.reduce((total, value) => {
     return total + parsePercentage(value.mpe_vs_mpp);
@@ -663,7 +663,7 @@ const getData = async (limit, page, search, filter) => {
   const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
   const mpe_plus_plan_count = totalCount.filter(
     (item) => item.mpe_plus_plan === "1"
-    ).length;
+  ).length;
   const mpe_vs_mpp = totalCount.filter((item) => item.mpe === "1").length;
   const fulfill = totalCount.filter(
     (item) => item.status_plan_fulfillment === "FULFILL"
@@ -680,18 +680,17 @@ const getData = async (limit, page, search, filter) => {
   const fptk_over_mpp = totalCount.filter(
     (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
   ).length;
-  
 
   return {
     filter: [
-      { 
+      {
         TOTAL: {
-        mpp_total: mpp_count,
-        mpe_total: mpe_count,
-        mpe_plus_plan_total: mpe_plus_plan_count,
-      }
-    }
-  ],
+          mpp_total: mpp_count,
+          mpe_total: mpe_count,
+          mpe_plus_plan_total: mpe_plus_plan_count,
+        },
+      },
+    ],
     mpe_vs_mpp: averageValue,
     fulfill: fulfill,
     vacant: vacant,
