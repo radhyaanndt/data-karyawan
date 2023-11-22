@@ -697,11 +697,11 @@ const getData = async (limit, page, search, filter) => {
   };
   
   const locationObject = {
-    location: {
+    location: 'all region',
     mpp_total: mpp_count,
     mpe_total: mpe_count,
     mpe_plus_plan_total: mpe_plus_plan_count,
-    }
+    
   };
 
   response.filter.push(locationObject);
