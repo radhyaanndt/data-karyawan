@@ -681,16 +681,8 @@ const getData = async (limit, page, search, filter) => {
     (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
   ).length;
 
-  return {
-    filter: [
-      {
-        TOTAL: {
-          mpp_total: mpp_count,
-          mpe_total: mpe_count,
-          mpe_plus_plan_total: mpe_plus_plan_count,
-        },
-      },
-    ],
+  const response = {
+    filter: [],
     mpe_vs_mpp: averageValue,
     fulfill: fulfill,
     vacant: vacant,
@@ -703,6 +695,18 @@ const getData = async (limit, page, search, filter) => {
     current_page: page,
     max_page: Math.ceil(count / limit),
   };
+  
+  const locationObject = {
+    location: {
+    mpp_total: mpp_count,
+    mpe_total: mpe_count,
+    mpe_plus_plan_total: mpe_plus_plan_count,
+    }
+  };
+
+  response.filter.push(locationObject);
+
+  return response
 };
 
 const getTotal = async () => {
