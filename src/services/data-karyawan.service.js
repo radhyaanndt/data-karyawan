@@ -12,13 +12,19 @@ const inputExcel = (file) => {
       throw new ApiError(httpStatus.BAD_REQUEST, "Please input file");
     }
 
-    if (file.mimetype !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+    if (
+      file.mimetype !==
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ) {
       throw new ApiError(httpStatus.BAD_REQUEST, "Invalid file format");
     }
 
     let excel2json;
 
-    if (file.originalname.split(".")[file.originalname.split(".").length - 1] === "xlsx") {
+    if (
+      file.originalname.split(".")[file.originalname.split(".").length - 1] ===
+      "xlsx"
+    ) {
       excel2json = xlsxtojson;
     } else {
       excel2json = xlstojson;
@@ -54,8 +60,17 @@ const getData = async (limit, page, search, filter) => {
 
   const whereClauseFilter = {};
 
-
-  if (filter[0] !== "" || filter[1] !== "" || filter[2] !== "" || filter[3] !== ""|| filter[4] !== "" || filter[5] !== "" || filter[6] !== "" || filter[7] !== "" || filter[8] !== "") {
+  if (
+    filter[0] !== "" ||
+    filter[1] !== "" ||
+    filter[2] !== "" ||
+    filter[3] !== "" ||
+    filter[4] !== "" ||
+    filter[5] !== "" ||
+    filter[6] !== "" ||
+    filter[7] !== "" ||
+    filter[8] !== ""
+  ) {
     whereClauseFilter[Op.and] = [];
 
     if (filter[0] !== "") {
@@ -94,7 +109,7 @@ const getData = async (limit, page, search, filter) => {
       whereClauseFilter[Op.and].push({ status_plan_fulfillment: filter[8] });
     }
   }
-  
+
   const whereClause = {
     [Op.or]: [
       { name: { [Op.iLike]: `%${query}%` } },
@@ -104,13 +119,12 @@ const getData = async (limit, page, search, filter) => {
       { status_plan_fulfillment: { [Op.iLike]: `%${query}%` } },
     ],
   };
-  
-  
+
   const [employees, totalCount] = await Promise.all([
     Employee_data.findAndCountAll({
       limit,
       offset,
-      attributes: { exclude: ['deletedAt'] },
+      attributes: { exclude: ["deletedAt"] },
       where: {
         ...whereClause,
         ...whereClauseFilter,
@@ -123,41 +137,37 @@ const getData = async (limit, page, search, filter) => {
       },
     }),
   ]);
-  
+
   const { rows, count } = employees;
 
   // regional
   if (filter[1] == "KALBAR") {
-    const mpp_count_abm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ABM").length;
-    const mpp_count_ats = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ATS").length;
-    const mpp_count_bsm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BSM").length;
-    const mpe_count_abm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ABM").length;
-    const mpe_count_ats = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ATS").length;
-    const mpe_count_bsm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BSM").length;
-    const mpe_plus_plan_count_abm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ABM").length;
-    const mpe_plus_plan_count_ats = totalCount.filter((item) => item.mpp === "1" && item.location_description == "ATS").length;
-    const mpe_plus_plan_count_bsm = totalCount.filter((item) => item.mpp === "1" && item.location_description == "BSM").length;
-    const fulfill = totalCount.filter((item) => item.status_plan_fulfillment === "FULFILL").length;
-    const vacant = totalCount.filter((item) => item.status_plan_fulfillment === "VACANT").length;
-    const closed = totalCount.filter((item) => item.status_plan_fulfillment === "CLOSED").length;
-    const over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "OVER MPP").length;
-    const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "FPTK OVER MPP").length;
-    return {
-      ABM: {
-        mpp_total: mpp_count_abm,
-        mpe_total: mpe_count_abm,
-        mpe_plus_plan_total: mpe_plus_plan_count_abm,
-      },
-      ATS: {
-        mpp_total: mpp_count_ats,
-        mpe_total: mpe_count_ats,
-        mpe_plus_plan_total: mpe_plus_plan_count_ats,
-      },
-      BSM:{
-        mpp_total: mpp_count_bsm,
-        mpe_total: mpe_count_bsm,
-        mpe_plus_plan_total: mpe_plus_plan_count_bsm,
-      },
+    const fulfill = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FULFILL"
+    ).length;
+    const vacant = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "VACANT"
+    ).length;
+    const closed = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "CLOSED"
+    ).length;
+    const over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "OVER MPP"
+    ).length;
+    const fptk_over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
+    ).length;
+
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
+    const parsePercentage = (percentage) => parseFloat(percentage);
+    const totalValue = mpeVsMpp.reduce((total, value) => {
+      return total + parsePercentage(value.mpe_vs_mpp);
+    }, 0);
+    const averageValue = Math.round(totalValue / mpeVsMpp.length);
+
+    const response = {
+      filter: [],
+      mpe_vs_mpp: averageValue,
       fulfill: fulfill,
       vacant: vacant,
       closed: closed,
@@ -168,21 +178,512 @@ const getData = async (limit, page, search, filter) => {
       total_data: count,
       current_page: page,
       max_page: Math.ceil(count / limit),
+    };
+
+    const locationCounts = {};
+
+    totalCount.forEach((item) => {
+      const location = item.location_description;
+
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
+
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
+
+    for (const location in locationCounts) {
+      const locationObject = {
+        location,
+        mpp_total: locationCounts[location].mpp_total,
+        mpe_total: locationCounts[location].mpe_total,
+        mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
+      };
+
+      response.filter.push(locationObject);
     }
+
+    return response;
   }
+
+  if (filter[1] == "SUMATERA") {
+    const fulfill = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FULFILL"
+    ).length;
+    const vacant = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "VACANT"
+    ).length;
+    const closed = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "CLOSED"
+    ).length;
+    const over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "OVER MPP"
+    ).length;
+    const fptk_over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
+    ).length;
+
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
+    const parsePercentage = (percentage) => parseFloat(percentage);
+    const totalValue = mpeVsMpp.reduce((total, value) => {
+      return total + parsePercentage(value.mpe_vs_mpp);
+    }, 0);
+    const averageValue = Math.round(totalValue / mpeVsMpp.length);
+
+    const response = {
+      filter: [],
+      mpe_vs_mpp: averageValue,
+      fulfill: fulfill,
+      vacant: vacant,
+      closed: closed,
+      over_mpp: over_mpp,
+      fptk_over_mpp: fptk_over_mpp,
+      employees: rows,
+      page_size: rows.length,
+      total_data: count,
+      current_page: page,
+      max_page: Math.ceil(count / limit),
+    };
+
+    const locationCounts = {};
+
+    totalCount.forEach((item) => {
+      const location = item.location_description;
+
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
+
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
+
+    for (const location in locationCounts) {
+      const locationObject = {
+        location,
+        mpp_total: locationCounts[location].mpp_total,
+        mpe_total: locationCounts[location].mpe_total,
+        mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
+      };
+
+      response.filter.push(locationObject);
+    }
+
+    return response;
+  }
+
+  if (filter[1] == "KALTENG") {
+    const fulfill = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FULFILL"
+    ).length;
+    const vacant = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "VACANT"
+    ).length;
+    const closed = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "CLOSED"
+    ).length;
+    const over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "OVER MPP"
+    ).length;
+    const fptk_over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
+    ).length;
+
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
+    const parsePercentage = (percentage) => parseFloat(percentage);
+    const totalValue = mpeVsMpp.reduce((total, value) => {
+      return total + parsePercentage(value.mpe_vs_mpp);
+    }, 0);
+    const averageValue = Math.round(totalValue / mpeVsMpp.length);
+
+    const response = {
+      filter: [],
+      mpe_vs_mpp: averageValue,
+      fulfill: fulfill,
+      vacant: vacant,
+      closed: closed,
+      over_mpp: over_mpp,
+      fptk_over_mpp: fptk_over_mpp,
+      employees: rows,
+      page_size: rows.length,
+      total_data: count,
+      current_page: page,
+      max_page: Math.ceil(count / limit),
+    };
+
+    const locationCounts = {};
+
+    totalCount.forEach((item) => {
+      const location = item.location_description;
+
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
+
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
+
+    for (const location in locationCounts) {
+      const locationObject = {
+        location,
+        mpp_total: locationCounts[location].mpp_total,
+        mpe_total: locationCounts[location].mpe_total,
+        mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
+      };
+
+      response.filter.push(locationObject);
+    }
+
+    return response;
+  }
+
+  if (filter[1] == "KALTIM I") {
+    const fulfill = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FULFILL"
+    ).length;
+    const vacant = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "VACANT"
+    ).length;
+    const closed = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "CLOSED"
+    ).length;
+    const over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "OVER MPP"
+    ).length;
+    const fptk_over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
+    ).length;
+
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
+    const parsePercentage = (percentage) => parseFloat(percentage);
+    const totalValue = mpeVsMpp.reduce((total, value) => {
+      return total + parsePercentage(value.mpe_vs_mpp);
+    }, 0);
+    const averageValue = Math.round(totalValue / mpeVsMpp.length);
+
+    const response = {
+      filter: [],
+      mpe_vs_mpp: averageValue,
+      fulfill: fulfill,
+      vacant: vacant,
+      closed: closed,
+      over_mpp: over_mpp,
+      fptk_over_mpp: fptk_over_mpp,
+      employees: rows,
+      page_size: rows.length,
+      total_data: count,
+      current_page: page,
+      max_page: Math.ceil(count / limit),
+    };
+
+    const locationCounts = {};
+
+    totalCount.forEach((item) => {
+      const location = item.location_description;
+
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
+
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
+
+    for (const location in locationCounts) {
+      const locationObject = {
+        location,
+        mpp_total: locationCounts[location].mpp_total,
+        mpe_total: locationCounts[location].mpe_total,
+        mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
+      };
+
+      response.filter.push(locationObject);
+    }
+
+    return response;
+  }
+
+  if (filter[1] == "KALTIM II") {
+    const fulfill = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FULFILL"
+    ).length;
+    const vacant = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "VACANT"
+    ).length;
+    const closed = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "CLOSED"
+    ).length;
+    const over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "OVER MPP"
+    ).length;
+    const fptk_over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
+    ).length;
+
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
+    const parsePercentage = (percentage) => parseFloat(percentage);
+    const totalValue = mpeVsMpp.reduce((total, value) => {
+      return total + parsePercentage(value.mpe_vs_mpp);
+    }, 0);
+    const averageValue = Math.round(totalValue / mpeVsMpp.length);
+
+    const response = {
+      filter: [],
+      mpe_vs_mpp: averageValue,
+      fulfill: fulfill,
+      vacant: vacant,
+      closed: closed,
+      over_mpp: over_mpp,
+      fptk_over_mpp: fptk_over_mpp,
+      employees: rows,
+      page_size: rows.length,
+      total_data: count,
+      current_page: page,
+      max_page: Math.ceil(count / limit),
+    };
+
+    const locationCounts = {};
+
+    totalCount.forEach((item) => {
+      const location = item.location_description;
+
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
+
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
+
+    for (const location in locationCounts) {
+      const locationObject = {
+        location,
+        mpp_total: locationCounts[location].mpp_total,
+        mpe_total: locationCounts[location].mpe_total,
+        mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
+      };
+
+      response.filter.push(locationObject);
+    }
+
+    return response;
+  }
+
+  if (filter[1] == "KALTIM III") {
+    const fulfill = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FULFILL"
+    ).length;
+    const vacant = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "VACANT"
+    ).length;
+    const closed = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "CLOSED"
+    ).length;
+    const over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "OVER MPP"
+    ).length;
+    const fptk_over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
+    ).length;
+
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
+    const parsePercentage = (percentage) => parseFloat(percentage);
+    const totalValue = mpeVsMpp.reduce((total, value) => {
+      return total + parsePercentage(value.mpe_vs_mpp);
+    }, 0);
+    const averageValue = Math.round(totalValue / mpeVsMpp.length);
+
+    const response = {
+      filter: [],
+      mpe_vs_mpp: averageValue,
+      fulfill: fulfill,
+      vacant: vacant,
+      closed: closed,
+      over_mpp: over_mpp,
+      fptk_over_mpp: fptk_over_mpp,
+      employees: rows,
+      page_size: rows.length,
+      total_data: count,
+      current_page: page,
+      max_page: Math.ceil(count / limit),
+    };
+
+    const locationCounts = {};
+
+    totalCount.forEach((item) => {
+      const location = item.location_description;
+
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
+
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
+
+    for (const location in locationCounts) {
+      const locationObject = {
+        location,
+        mpp_total: locationCounts[location].mpp_total,
+        mpe_total: locationCounts[location].mpe_total,
+        mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
+      };
+
+      response.filter.push(locationObject);
+    }
+
+    return response;
+  }
+
+  if (filter[1] == "HEAD OFFICE") {
+    const fulfill = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FULFILL"
+    ).length;
+    const vacant = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "VACANT"
+    ).length;
+    const closed = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "CLOSED"
+    ).length;
+    const over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "OVER MPP"
+    ).length;
+    const fptk_over_mpp = totalCount.filter(
+      (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
+    ).length;
+
+    const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
+    const parsePercentage = (percentage) => parseFloat(percentage);
+    const totalValue = mpeVsMpp.reduce((total, value) => {
+      return total + parsePercentage(value.mpe_vs_mpp);
+    }, 0);
+    const averageValue = Math.round(totalValue / mpeVsMpp.length);
+
+    const response = {
+      filter: [],
+      mpe_vs_mpp: averageValue,
+      fulfill: fulfill,
+      vacant: vacant,
+      closed: closed,
+      over_mpp: over_mpp,
+      fptk_over_mpp: fptk_over_mpp,
+      employees: rows,
+      page_size: rows.length,
+      total_data: count,
+      current_page: page,
+      max_page: Math.ceil(count / limit),
+    };
+
+    const locationCounts = {};
+
+    totalCount.forEach((item) => {
+      const location = item.division_description;
+
+      if (!locationCounts[location]) {
+        locationCounts[location] = {
+          mpp_total: 0,
+          mpe_total: 0,
+          mpe_plus_plan_total: 0,
+        };
+      }
+
+      locationCounts[location].mpp_total += parseInt(item.mpp);
+      locationCounts[location].mpe_total += parseInt(item.mpe);
+      locationCounts[location].mpe_plus_plan_total += parseInt(
+        item.mpe_plus_plan
+      );
+    });
+
+    for (const location in locationCounts) {
+      const locationObject = {
+        location,
+        mpp_total: locationCounts[location].mpp_total,
+        mpe_total: locationCounts[location].mpe_total,
+        mpe_plus_plan_total: locationCounts[location].mpe_plus_plan_total,
+      };
+
+      response.filter.push(locationObject);
+    }
+
+    return response;
+  }
+
+  const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
+  const parsePercentage = (percentage) => parseFloat(percentage);
+  const totalValue = mpeVsMpp.reduce((total, value) => {
+    return total + parsePercentage(value.mpe_vs_mpp);
+  }, 0);
+  const averageValue = Math.round(totalValue / mpeVsMpp.length);
+
   const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
   const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
-  const mpe_plus_plan_count = totalCount.filter((item) => item.mpe_plus_plan === "1").length;
-  const fulfill = totalCount.filter((item) => item.status_plan_fulfillment === "FULFILL").length;
-  const vacant = totalCount.filter((item) => item.status_plan_fulfillment === "VACANT").length;
-  const closed = totalCount.filter((item) => item.status_plan_fulfillment === "CLOSED").length;
-  const over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "OVER MPP").length;
-  const fptk_over_mpp = totalCount.filter((item) => item.status_plan_fulfillment === "FPTK OVER MPP").length;
-  
-  return {
-    mpp_total: mpp_count,
-    mpe_total: mpe_count,
-    mpe_plus_plan_total: mpe_plus_plan_count,
+  const mpe_plus_plan_count = totalCount.filter(
+    (item) => item.mpe_plus_plan === "1"
+  ).length;
+  const mpe_vs_mpp = totalCount.filter((item) => item.mpe === "1").length;
+  const fulfill = totalCount.filter(
+    (item) => item.status_plan_fulfillment === "FULFILL"
+  ).length;
+  const vacant = totalCount.filter(
+    (item) => item.status_plan_fulfillment === "VACANT"
+  ).length;
+  const closed = totalCount.filter(
+    (item) => item.status_plan_fulfillment === "CLOSED"
+  ).length;
+  const over_mpp = totalCount.filter(
+    (item) => item.status_plan_fulfillment === "OVER MPP"
+  ).length;
+  const fptk_over_mpp = totalCount.filter(
+    (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
+  ).length;
+
+  const response = {
+    filter: [],
+    mpe_vs_mpp: averageValue,
     fulfill: fulfill,
     vacant: vacant,
     closed: closed,
@@ -194,6 +695,18 @@ const getData = async (limit, page, search, filter) => {
     current_page: page,
     max_page: Math.ceil(count / limit),
   };
+  
+  const locationObject = {
+    location: 'all region',
+    mpp_total: mpp_count,
+    mpe_total: mpe_count,
+    mpe_plus_plan_total: mpe_plus_plan_count,
+    
+  };
+
+  response.filter.push(locationObject);
+
+  return response
 };
 
 const getTotal = async () => {
@@ -234,19 +747,18 @@ const getTotal = async () => {
 };
 
 const deleteData = async (targetTimestamp) => {
-  console.log("masok", targetTimestamp);
-  if (!targetTimestamp || targetTimestamp == 'Invalid Date') {
+  if (!targetTimestamp || targetTimestamp == "Invalid Date") {
     throw new ApiError(httpStatus.BAD_REQUEST, "Invalid date format");
   }
-    const result = await Employee_data.destroy({
-      where: {
-        createdAt: {
-          [Op.lt]: targetTimestamp,
-        },
+  const result = await Employee_data.destroy({
+    where: {
+      createdAt: {
+        [Op.lt]: targetTimestamp,
       },
-    });
+    },
+  });
 
-    return result;
-}
+  return result;
+};
 
 module.exports = { inputExcel, insertData, getData, getTotal, deleteData };

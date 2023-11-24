@@ -29,7 +29,6 @@ const getRegional = async (req, res) => {
 
     const transformedData = data.map((item) => item.regional);
     transformedData.push("");
-
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -75,7 +74,6 @@ const getLocationDescription = async (req, res) => {
 
     const transformedData = data.map((item) => item.location_description);
     transformedData.push("");
-
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -144,7 +142,6 @@ const getStatus = async (req, res) => {
 
     const transformedData = data.map((item) => item.status);
     transformedData.push("");
-
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -167,7 +164,7 @@ const getPositionDescription = async (req, res) => {
 
     const transformedData = data.map((item) => item.position_description);
     transformedData.push("");
-
+    
     return res.status(200).send({
       status: 200,
       message: "OK",
