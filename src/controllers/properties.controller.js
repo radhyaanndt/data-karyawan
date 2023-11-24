@@ -6,6 +6,7 @@ const getBusinessUnit = async (req, res) => {
 
     const transformedData = data.map((item) => item.business_unit_description);
     transformedData.push("");
+
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -50,6 +51,7 @@ const getGroup = async (req, res) => {
 
     const transformedData = data.map((item) => item.group);
     transformedData.push("");
+
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -94,6 +96,7 @@ const getDirectoratDescription = async (req, res) => {
 
     const transformedData = data.map((item) => item.directorat_description);
     transformedData.push("");
+
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -116,6 +119,7 @@ const getDivisionDescription = async (req, res) => {
 
     const transformedData = data.map((item) => item.division_description);
     transformedData.push("");
+
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -160,6 +164,7 @@ const getPositionDescription = async (req, res) => {
 
     const transformedData = data.map((item) => item.position_description);
     transformedData.push("");
+    
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -182,6 +187,7 @@ const getStatusPlanFulfillment = async (req, res) => {
 
     const transformedData = data.map((item) => item.status_plan_fulfillment);
     transformedData.push("");
+
     return res.status(200).send({
       status: 200,
       message: "OK",

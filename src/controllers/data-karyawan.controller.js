@@ -41,8 +41,8 @@ const inputData = async (req, res) => {
     });
   } catch (error) {
     if (error) {
-      return res.status(error.statusCode).send({
-        status: error.statusCode,
+      return res.status(500).send({
+        status: 500,
         message: "Internal Server Error",
         errors: error.message,
       });
