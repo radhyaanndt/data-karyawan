@@ -64,6 +64,8 @@ const getData = async (req, res) => {
     req.query.status || "",
     req.query.position_description || "",
     req.query.status_plan_fulfillment || "",
+    req.query.plan_fulfillment || "",
+    req.query.detail_plan_fulfillment || "",
   ];
 
   try {
