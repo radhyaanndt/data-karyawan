@@ -69,7 +69,9 @@ const getData = async (limit, page, search, filter) => {
     filter[5] !== "" ||
     filter[6] !== "" ||
     filter[7] !== "" ||
-    filter[8] !== ""
+    filter[8] !== "" ||
+    filter[9] !== "" ||
+    filter[10] !== ""
   ) {
     whereClauseFilter[Op.and] = [];
 
@@ -107,6 +109,12 @@ const getData = async (limit, page, search, filter) => {
 
     if (filter[8] !== "") {
       whereClauseFilter[Op.and].push({ status_plan_fulfillment: filter[8] });
+    }
+    if (filter[9] !== "") {
+      whereClauseFilter[Op.and].push({ plan_fulfillment: filter[9] });
+    }
+    if (filter[10] !== "") {
+      whereClauseFilter[Op.and].push({ detail_plan_fulfillment: filter[10] });
     }
   }
 
@@ -652,19 +660,12 @@ const getData = async (limit, page, search, filter) => {
     return response;
   }
 
-  const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
-  const parsePercentage = (percentage) => parseFloat(percentage);
-  const totalValue = mpeVsMpp.reduce((total, value) => {
-    return total + parsePercentage(value.mpe_vs_mpp);
-  }, 0);
-  const averageValue = Math.round(totalValue / mpeVsMpp.length);
-
   const mpp_count = totalCount.filter((item) => item.mpp === "1").length;
   const mpe_count = totalCount.filter((item) => item.mpe === "1").length;
   const mpe_plus_plan_count = totalCount.filter(
     (item) => item.mpe_plus_plan === "1"
   ).length;
-  const mpe_vs_mpp = totalCount.filter((item) => item.mpe === "1").length;
+  
   const fulfill = totalCount.filter(
     (item) => item.status_plan_fulfillment === "FULFILL"
   ).length;
@@ -680,6 +681,13 @@ const getData = async (limit, page, search, filter) => {
   const fptk_over_mpp = totalCount.filter(
     (item) => item.status_plan_fulfillment === "FPTK OVER MPP"
   ).length;
+
+  const mpeVsMpp = totalCount.filter((value) => value.mpe_vs_mpp !== "0%");
+  const parsePercentage = (percentage) => parseFloat(percentage);
+  const totalValue = mpeVsMpp.reduce((total, value) => {
+    return total + parsePercentage(value.mpe_vs_mpp);
+  }, 0);
+  const averageValue = Math.round(totalValue / mpeVsMpp.length);
 
   const response = {
     filter: [],

@@ -3,14 +3,19 @@ const propertiesService = require ("../services/properties-service")
 const getBusinessUnit = async (req, res) => {
   try {
     const data = await propertiesService.getBusinessUnit();
-
     const transformedData = data.map((item) => item.business_unit_description);
-    transformedData.push("");
+    const uniqueData = Array.from(new Set(transformedData));
+
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
 
     return res.status(200).send({
       status: 200,
       message: "OK",
-      data: transformedData,
+      data: uniqueData,
     });
   } catch (error) {
     if (error) {
@@ -26,13 +31,18 @@ const getBusinessUnit = async (req, res) => {
 const getRegional = async (req, res) => {
   try {
     const data = await propertiesService.getRegional();
-
     const transformedData = data.map((item) => item.regional);
-    transformedData.push("");
+    const uniqueData = Array.from(new Set(transformedData));
+
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
     return res.status(200).send({
       status: 200,
       message: "OK",
-      data: transformedData,
+      data: uniqueData,
     });
   } catch (error) {
     if (error) {
@@ -48,14 +58,19 @@ const getRegional = async (req, res) => {
 const getGroup = async (req, res) => {
   try {
     const data = await propertiesService.getGroup();
-
     const transformedData = data.map((item) => item.group);
-    transformedData.push("");
+    const uniqueData = Array.from(new Set(transformedData));
+
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
 
     return res.status(200).send({
       status: 200,
       message: "OK",
-      data: transformedData,
+      data: uniqueData,
     });
   } catch (error) {
     if (error) {
@@ -71,13 +86,19 @@ const getGroup = async (req, res) => {
 const getLocationDescription = async (req, res) => {
   try {
     const data = await propertiesService.getLocationDescription();
-
     const transformedData = data.map((item) => item.location_description);
-    transformedData.push("");
+    const uniqueData = Array.from(new Set(transformedData));
+
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
+
     return res.status(200).send({
       status: 200,
       message: "OK",
-      data: transformedData,
+      data: uniqueData,
     });
   } catch (error) {
     if (error) {
@@ -93,14 +114,19 @@ const getLocationDescription = async (req, res) => {
 const getDirectoratDescription = async (req, res) => {
   try {
     const data = await propertiesService.getDirectoratDescription();
-
     const transformedData = data.map((item) => item.directorat_description);
-    transformedData.push("");
+    const uniqueData = Array.from(new Set(transformedData));
+
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
 
     return res.status(200).send({
       status: 200,
       message: "OK",
-      data: transformedData,
+      data: uniqueData  ,
     });
   } catch (error) {
     if (error) {
@@ -116,14 +142,19 @@ const getDirectoratDescription = async (req, res) => {
 const getDivisionDescription = async (req, res) => {
   try {
     const data = await propertiesService.getDivisionDescription();
-
     const transformedData = data.map((item) => item.division_description);
-    transformedData.push("");
+    const uniqueData = Array.from(new Set(transformedData));
+
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
 
     return res.status(200).send({
       status: 200,
       message: "OK",
-      data: transformedData,
+      data: uniqueData,
     });
   } catch (error) {
     if (error) {
@@ -139,13 +170,19 @@ const getDivisionDescription = async (req, res) => {
 const getStatus = async (req, res) => {
   try {
     const data = await propertiesService.getStatus();
-
     const transformedData = data.map((item) => item.status);
-    transformedData.push("");
+    const uniqueData = Array.from(new Set(transformedData));
+
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
+
     return res.status(200).send({
       status: 200,
       message: "OK",
-      data: transformedData,
+      data: uniqueData,
     });
   } catch (error) {
     if (error) {
@@ -161,14 +198,19 @@ const getStatus = async (req, res) => {
 const getPositionDescription = async (req, res) => {
   try {
     const data = await propertiesService.getPositionDescription();
-
     const transformedData = data.map((item) => item.position_description);
-    transformedData.push("");
-    
+    const uniqueData = Array.from(new Set(transformedData));
+
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
+
     return res.status(200).send({
       status: 200,
       message: "OK",
-      data: transformedData,
+      data: uniqueData,
     });
   } catch (error) {
     if (error) {
@@ -184,14 +226,19 @@ const getPositionDescription = async (req, res) => {
 const getStatusPlanFulfillment = async (req, res) => {
   try {
     const data = await propertiesService.getStatusPlanFulfillment();
-
     const transformedData = data.map((item) => item.status_plan_fulfillment);
-    transformedData.push("");
+    const uniqueData = Array.from(new Set(transformedData));
 
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
+    
     return res.status(200).send({
       status: 200,
       message: "OK",
-      data: transformedData,
+      data: uniqueData,
     });
   } catch (error) {
     if (error) {
@@ -204,4 +251,60 @@ const getStatusPlanFulfillment = async (req, res) => {
   }
 };
 
-module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription, getDivisionDescription, getStatus, getPositionDescription, getStatusPlanFulfillment }
+const getPlanFulfillment = async (req, res) => {
+  try {
+    const data = await propertiesService.getPlanFulfillment();
+    const transformedData = data.map((item) => item.plan_fulfillment);
+    const uniqueData = Array.from(new Set(transformedData));
+
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
+
+    return res.status(200).send({
+      status: 200,
+      message: "OK",
+      data: uniqueData,
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(500).send({
+        status: 500,
+        message: "Internal Server Error",
+        errors: error.message,
+      });
+    }
+  }
+};
+
+const getDetailPlanFulfillment = async (req, res) => {
+  try {
+    const data = await propertiesService.getDetailPlanFulfillment();
+    const transformedData = data.map((item) => item.detail_plan_fulfillment);
+    const uniqueData = Array.from(new Set(transformedData));
+
+    const indexEmptyString = uniqueData.indexOf("");
+    if (indexEmptyString !== -1) {
+      uniqueData.splice(indexEmptyString, 1);
+      uniqueData.push("");
+    }
+
+    return res.status(200).send({
+      status: 200,
+      message: "OK",
+      data: uniqueData,
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(500).send({
+        status: 500,
+        message: "Internal Server Error",
+        errors: error.message,
+      });
+    }
+  }
+};
+
+module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription, getDivisionDescription, getStatus, getPositionDescription, getStatusPlanFulfillment, getPlanFulfillment, getDetailPlanFulfillment }

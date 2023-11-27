@@ -13,5 +13,7 @@ router.get("/division-description", propertiesController.getDivisionDescription)
 router.get("/status", propertiesController.getStatus);
 router.get("/position-description", propertiesController.getPositionDescription);
 router.get("/status-plan-fulfillment", propertiesController.getStatusPlanFulfillment);
+router.get("/plan-fulfillment", propertiesController.getPlanFulfillment);
+router.get("/detail-plan-fulfillment", propertiesController.getDetailPlanFulfillment);
 
 module.exports = router;

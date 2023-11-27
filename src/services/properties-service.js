@@ -74,4 +74,20 @@ const getStatusPlanFulfillment = async () => {
   return data;
 };
 
-module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription, getDivisionDescription, getStatus, getPositionDescription, getStatusPlanFulfillment }
+const getPlanFulfillment = async () => {
+  const data = await Employee_data.findAll({
+    attributes: [[sequelize.fn("DISTINCT", sequelize.col("plan_fulfillment")), "plan_fulfillment"]],
+  });
+
+  return data;
+};
+
+const getDetailPlanFulfillment = async () => {
+  const data = await Employee_data.findAll({
+    attributes: [[sequelize.fn("DISTINCT", sequelize.col("detail_plan_fulfillment")), "detail_plan_fulfillment"]],
+  });
+
+  return data;
+};
+
+module.exports = { getBusinessUnit, getRegional, getGroup, getLocationDescription, getDirectoratDescription, getDivisionDescription, getStatus, getPositionDescription, getStatusPlanFulfillment, getPlanFulfillment, getDetailPlanFulfillment }
