@@ -36,9 +36,11 @@ const login = async (reqBody) => {
   if (!email || !password) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Empty data. Please fill the form");
   }
+
+  const isEmail = validator.isEmail(email);
   const user = await Users.findOne({
     where: {
-      email,
+      [isEmail ? 'email' : 'username']: email,
     },
     include: {
       model: Roles,
@@ -84,10 +86,26 @@ const login = async (reqBody) => {
 };
 
 const register = async (reqBody) => {
-  const { full_name, email, password, confirm_password } = reqBody;
+  const { full_name, email, username, password, confirm_password } = reqBody;
 
-  if (!full_name || !email || !password) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Empty data. Please fill the form");
+  if (!full_name) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Full Name is required");
+  }
+
+  if (!email) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Email is required");
+  }
+
+  if (!username) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Username is required");
+  }
+
+  if (username.includes(' ')) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Username cannot contain spaces");
+  }
+
+  if (!password) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Password is required");
   }
 
   if (!validator.isEmail(email)) {
@@ -104,6 +122,16 @@ const register = async (reqBody) => {
     throw new ApiError(httpStatus.CONFLICT, "Email is already registered");
   }
 
+  const findUsername = await Users.findOne({
+    where: {
+      username,
+    },
+  });
+
+  if (findUsername) {
+    throw new ApiError(httpStatus.CONFLICT, "Cannot use this username. Username used");
+  }
+
   if (password != confirm_password) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Confirm password must be the same as password");
   }
@@ -117,6 +145,7 @@ const register = async (reqBody) => {
 
   const user = {
     full_name,
+    username,
     email,
     password: hash,
   };

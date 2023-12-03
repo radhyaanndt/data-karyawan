@@ -10,8 +10,8 @@ const login = async (req, res) => {
     });
   } catch (error) {
     if (error) {
-      return res.status(error.statusCode).send({
-        status: error.statusCode,
+      return res.status(500).send({
+        status: 500,
         message: "Internal Server Error",
         errors: error.message,
       });
@@ -29,9 +29,20 @@ const register = async (req, res) => {
       data: user,
     });
   } catch (error) {
-    if (error) {
-      return res.status(error.statusCode || 500).send({
-        status: error.statusCode,
+    if (error.name === "SequelizeValidationError") {
+      const validationErrors = error.errors.map((err) => ({
+        field: err.path,
+        message: err.message,
+      }));
+
+      return res.status(400).json({
+        status: 400,
+        message: "Bad Request",
+        errors: validationErrors,
+      });
+    } else {
+      return res.status(500).send({
+        status: 500,
         message: "Internal Server Error",
         errors: error.message,
       });
