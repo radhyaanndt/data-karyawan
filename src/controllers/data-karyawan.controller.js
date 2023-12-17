@@ -112,7 +112,6 @@ const deleteData = async (req, res) => {
   try {
     const targetMonth = req.query.targetMonth;
 
-    // Validasi format bulan (contoh: 'YYYY-MM')
     if (!/^\d{4}-\d{2}$/.test(targetMonth)) {
       return res.status(400).send({
         status: 400,
