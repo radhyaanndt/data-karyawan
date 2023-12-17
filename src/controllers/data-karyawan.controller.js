@@ -107,11 +107,20 @@ const getTotal = async (req, res) => {
   }
 };
 
+
 const deleteData = async (req, res) => {
   try {
-    const targetTimestamp = new Date(req.query.targetTimestamp);
+    const targetMonth = req.query.targetMonth;
 
-    const result = await dataKaryawanService.deleteData(targetTimestamp);
+    // Validasi format bulan (contoh: 'YYYY-MM')
+    if (!/^\d{4}-\d{2}$/.test(targetMonth)) {
+      return res.status(400).send({
+        status: 400,
+        message: 'Invalid targetMonth format. Please use YYYY-MM format.',
+      });
+    }
+
+    const result = await dataKaryawanService.deleteData(targetMonth);
 
     if (result > 0) {
       return res.status(200).send({ 
@@ -127,11 +136,11 @@ const deleteData = async (req, res) => {
   } catch (error) {
     return res.status(500).send({
       status: 500,
-      message: "Internal Server Error",
+      message: 'Internal Server Error',
       errors: error.message,
     });
   }
+};
 
-}
 
 module.exports = { inputData, getData, getTotal, deleteData };

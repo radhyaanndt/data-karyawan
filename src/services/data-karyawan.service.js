@@ -754,19 +754,24 @@ const getTotal = async () => {
   };
 };
 
-const deleteData = async (targetTimestamp) => {
-  if (!targetTimestamp || targetTimestamp == "Invalid Date") {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid date format");
-  }
-  const result = await Employee_data.destroy({
-    where: {
-      createdAt: {
-        [Op.lt]: targetTimestamp,
-      },
-    },
-  });
+const deleteData = async (targetMonth) => {
+  try {
+    const startDate = new Date(targetMonth + '-01');
+    const endDate = new Date(new Date(targetMonth + '-01').setMonth(startDate.getMonth() + 1));
 
-  return result;
+    const result = await Employee_data.destroy({
+      where: {
+        createdAt: {
+          [Op.gte]: startDate,
+          [Op.lt]: endDate,
+        },
+      },
+    });
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
 };
 
 module.exports = { inputExcel, insertData, getData, getTotal, deleteData };
