@@ -9,8 +9,8 @@ const getBusinessUnit = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
 
     return res.status(200).send({
       status: 200,
@@ -37,8 +37,9 @@ const getRegional = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
+
     return res.status(200).send({
       status: 200,
       message: "OK",
@@ -64,8 +65,8 @@ const getGroup = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
 
     return res.status(200).send({
       status: 200,
@@ -92,8 +93,8 @@ const getLocationDescription = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
 
     return res.status(200).send({
       status: 200,
@@ -120,8 +121,8 @@ const getDirectoratDescription = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
 
     return res.status(200).send({
       status: 200,
@@ -148,8 +149,8 @@ const getDivisionDescription = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
 
     return res.status(200).send({
       status: 200,
@@ -176,8 +177,8 @@ const getStatus = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
 
     return res.status(200).send({
       status: 200,
@@ -204,8 +205,8 @@ const getPositionDescription = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
 
     return res.status(200).send({
       status: 200,
@@ -232,8 +233,8 @@ const getStatusPlanFulfillment = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
     
     return res.status(200).send({
       status: 200,
@@ -260,8 +261,8 @@ const getPlanFulfillment = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
 
     return res.status(200).send({
       status: 200,
@@ -288,8 +289,8 @@ const getDetailPlanFulfillment = async (req, res) => {
     const indexEmptyString = uniqueData.indexOf("");
     if (indexEmptyString !== -1) {
       uniqueData.splice(indexEmptyString, 1);
-      uniqueData.push("");
     }
+    uniqueData.push("");
 
     return res.status(200).send({
       status: 200,
