@@ -29,18 +29,7 @@ const register = async (req, res) => {
       data: user,
     });
   } catch (error) {
-    if (error.name === "SequelizeValidationError") {
-      const validationErrors = error.errors.map((err) => ({
-        field: err.path,
-        message: err.message,
-      }));
-
-      return res.status(400).json({
-        status: 400,
-        message: "Bad Request",
-        errors: validationErrors,
-      });
-    } else {
+    if (error) {
       return res.status(500).send({
         status: 500,
         message: "Internal Server Error",
