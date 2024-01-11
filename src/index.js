@@ -7,6 +7,7 @@ const router = require("./routes/router");
 dotenv.config();
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(cors())
 app.use(express.json());
@@ -18,7 +19,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.listen(process.env.APP_PORT, () => {
+app.listen(port, "0.0.0.0", function () {
   console.log(`${process.env.APP_NAME} running on port ${process.env.APP_PORT}`);
 });
 
