@@ -28,7 +28,6 @@ class UserService {
           });
       
           return {
-            filter: filter || [], 
             users: rows, 
             page_size: rows.length,
             total_data: count, 
@@ -41,21 +40,21 @@ class UserService {
       }
       
 
-  //   static async deleteDescription(id) {
-  //     try {
-  //       const description = await Description.findByPk(id);
+    static async delete(id) {
+      try {
+        const user = await Users.findByPk(id);
 
-  //       if (!description) {
-  //         throw new Error('Description not found');
-  //       }
+        if (!user) {
+          throw new Error('User not found');
+        }
 
-  //       await description.destroy();
+        await user.destroy();
 
-  //       return description;
-  //     } catch (error) {
-  //       throw error;
-  //     }
-  //   }
+        return user;
+      } catch (error) {
+        throw error;
+      }
+    }
 }
 
 module.exports = UserService;

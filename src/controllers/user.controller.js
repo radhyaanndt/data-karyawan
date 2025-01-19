@@ -28,26 +28,26 @@ class UserController {
       }
       
 
-  //   static async deleteDescription(req, res) {
-  //     try {
-  //       const { id } = req.params;
-  //       const description = await DescriptionService.deleteDescription(id);
+    static async delete(req, res) {
+      try {
+        const { id } = req.params;
+        const user = await UserService.delete(id);
 
-  //       return res.status(200).send({
-  //         status: 200,
-  //         message: "OK",
-  //         data: description,
-  //       });
-  //     } catch (error) {
-  //       if (error) {
-  //         return res.status(500).send({
-  //           status: 500,
-  //           message: "Internal Server Error",
-  //           errors: error.message,
-  //         });
-  //       }
-  //     }
-  //   }
+        return res.status(200).send({
+          status: 200,
+          message: "OK",
+          data: null,
+        });
+      } catch (error) {
+        if (error) {
+          return res.status(500).send({
+            status: 500,
+            message: "Internal Server Error",
+            errors: error.message,
+          });
+        }
+      }
+    }
 }
 
 module.exports = UserController;
