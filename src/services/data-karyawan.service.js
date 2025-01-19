@@ -5,6 +5,7 @@ const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 const { Employee_data } = require("../models");
 const { Op } = require("sequelize");
+const ExcelJS = require('exceljs');
 
 const inputExcel = (file) => {
   return new Promise((resolve, reject) => {
@@ -774,4 +775,86 @@ const deleteData = async (targetMonth) => {
   }
 };
 
-module.exports = { inputExcel, insertData, getData, getTotal, deleteData };
+const toExcel = async (data, total) => {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Employees');
+
+  // Define headers for the Excel file
+  const headers = [
+    'ID', 'NIK', 'Name', 'Hire Date', 'Length of Service', 'Position Description',
+    'Start Position', 'Length of Position', 'Manager Level', 'MPP', 'MPE', 'MPE vs MPP', 
+    'Status', 'Group', 'Department', 'Division', 'Directorate', 'Location', 'Regional',
+    'Business Unit', 'Plan Fulfillment', 'Plan Fulfillment Detail', 'NIK Plan', 'Employee Name Plan Fulfillment',
+    'MPE Plus Plan', 'Status Plan Fulfillment', 'Created At', 'Updated At'
+  ];
+
+  // Add headers to the Excel worksheet
+  worksheet.addRow(headers);
+
+  // Add employee data rows
+  data.employees.forEach(employee => {
+    const row = [
+      employee.id,
+      employee.nik,
+      employee.name,
+      employee.hire_date,
+      employee.length_of_service,
+      employee.position_description,
+      employee.start_position,
+      employee.length_of_position,
+      employee.mgr_level_description,
+      employee.mpp,
+      employee.mpe,
+      employee.mpe_vs_mpp,
+      employee.status,
+      employee.group,
+      employee.departmen_description,
+      employee.division_description,
+      employee.directorat_description,
+      employee.location_description,
+      employee.regional,
+      employee.business_unit_description,
+      employee.plan_fulfillment,
+      employee.detail_plan_fulfillment,
+      employee.nik_plan,
+      employee.nama_karyawan_plan_fulfillment,
+      employee.mpe_plus_plan,
+      employee.status_plan_fulfillment,
+      employee.createdAt,
+      employee.updatedAt
+    ];
+
+    worksheet.addRow(row);
+  });
+
+  const totalHeaders = [
+    'Total Summary', '', '', '', '', '', '', '', '', 'Total MPP', 'Total MPE', 'Total MPE vs MPP', 
+    '', '', '', '', '', '', '', '', '', '', '', '', 'Total MPE + PLAN', 'status', ''
+  ];
+
+  worksheet.addRow(totalHeaders);
+console.log("TOTAL {}", total.data)
+  const totalsRow = [
+    'TOTAL', // You can write "TOTAL" or any identifier you like in the first column
+    '', '', '', '', '', '', '', '', 
+    total.data[0].total_data, 
+    total.data[1].total_data, 
+    data.mpe_vs_mpp,
+    '', '', '', '', '', 
+    '', '', 
+    data.plan_fulfillment, 
+    data.detail_plan_fulfillment, 
+    data.nik_plan, 
+    data.nama_karyawan_plan_fulfillment,
+    '',
+    total.data[2].total_data,
+    data.fulfill,
+    data.vacant, data.over_mpp // Or any other columns for total values if needed
+  ];
+
+  worksheet.addRow(totalsRow);
+
+  return workbook;
+};
+
+module.exports = { inputExcel, insertData, getData, getTotal, deleteData, toExcel };

@@ -12,5 +12,6 @@ router.get("/", dataKaryawanController.getData)
 router.post("/input-data", authentication, upload, dataKaryawanController.inputData);
 router.get("/total", dataKaryawanController.getTotal)
 router.delete("/delete", authentication, dataKaryawanController.deleteData)
+router.get("/download", dataKaryawanController.generateExcel)
 
 module.exports = router;

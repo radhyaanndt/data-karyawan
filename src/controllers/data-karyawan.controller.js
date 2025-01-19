@@ -1,3 +1,5 @@
+const { search } = require("..");
+const ExcelJS = require('exceljs');
 const dataKaryawanService = require("../services/data-karyawan.service");
 
 const inputData = async (req, res) => {
@@ -69,7 +71,12 @@ const getData = async (req, res) => {
   ];
 
   try {
-    const employees = await dataKaryawanService.getData(limit, page, query, filter);
+    const employees = await dataKaryawanService.getData(
+      limit,
+      page,
+      query,
+      filter
+    );
 
     return res.status(200).send({
       status: 200,
@@ -107,7 +114,6 @@ const getTotal = async (req, res) => {
   }
 };
 
-
 const deleteData = async (req, res) => {
   try {
     const targetMonth = req.query.targetMonth;
@@ -115,31 +121,68 @@ const deleteData = async (req, res) => {
     if (!/^\d{4}-\d{2}$/.test(targetMonth)) {
       return res.status(400).send({
         status: 400,
-        message: 'Invalid targetMonth format. Please use YYYY-MM format.',
+        message: "Invalid targetMonth format. Please use YYYY-MM format.",
       });
     }
 
     const result = await dataKaryawanService.deleteData(targetMonth);
 
     if (result > 0) {
-      return res.status(200).send({ 
+      return res.status(200).send({
         status: 200,
-        message: 'Data Deleted',
+        message: "Data Deleted",
       });
     } else {
       res.status(404).send({
         status: 404,
-        message: 'No data met the criteria for deletion',
+        message: "No data met the criteria for deletion",
       });
     }
   } catch (error) {
     return res.status(500).send({
       status: 500,
-      message: 'Internal Server Error',
+      message: "Internal Server Error",
       errors: error.message,
     });
   }
 };
 
+const generateExcel = async (req, res) => {
+  const limit = parseInt(req.query.limit) || 1000;
+  const page = parseInt(req.query.page) || 1;
+  const query = req.query.search || "";
+  const filter = [
+    req.query.business_unit_description || "",
+    req.query.regional || "",
+    req.query.group || "",
+    req.query.location_description || "",
+    req.query.directorat_description || "",
+    req.query.division_description || "",
+    req.query.status || "",
+    req.query.position_description || "",
+    req.query.status_plan_fulfillment || "",
+    req.query.plan_fulfillment || "",
+    req.query.detail_plan_fulfillment || "",
+  ];
+  try {
+    const data = await dataKaryawanService.getData(limit, page, query, filter);
+    const total = await dataKaryawanService.getTotal()
+    const workbook = await dataKaryawanService.toExcel(data, total);
 
-module.exports = { inputData, getData, getTotal, deleteData };
+    // Set response headers to indicate it's an Excel file
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader("Content-Disposition", "attachment; filename=employees.xlsx");
+
+    // Send the Excel file to the client
+    await workbook.xlsx.write(res);
+    res.end();
+  } catch (error) {
+    console.error("Error generating Excel file:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports = { inputData, getData, getTotal, deleteData, generateExcel };
